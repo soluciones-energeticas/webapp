@@ -1,0 +1,66 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
+
+aside{
+  width: 80px;
+  transition: width ease-out 0.2s;
+}
+
+aside:hover{
+  width: 200px;
+}
+
+main{
+  background-color: white;
+}
+
+#logo_img{
+  width: 60px;
+}
+
+aside span{
+  display: none;
+}
+
+aside:hover span{
+  display: block;
+}
+
+aside:hover img{
+  width: 120px !important;
+}
+
+aside:hover .menu_option:hover, aside:hover .user_info{
+  cursor: pointer;
+  border-left: 2px solid rgba(177, 177, 238, 0.9);
+  background-color: rgba(39, 39, 56, 0.288);
+
+}
+
+aside:hover .menu_option{
+  padding: 10px;
+  padding-left: 2rem;
+  border-left: 2px solid transparent;
+}
+
+/* #compras_article{
+  background-color: black;
+} */
+
+/* #compras_article_tabs{
+  background-color: black;
+} */
+
+#compras_article_requerimientos_iframe,#compras_article_documentacion_iframe{
+  height: 95%;
+}
+
