@@ -13,26 +13,12 @@ d.addEventListener('click', e => {
       const li = target.parentElement
       const id = li.id
       
-      li.classList.add('active')
+      // li.classList.add('active')
       
       const iframe_id = id.replace('_li','_iframe')
       d.getElementById(iframe_id).classList.remove('d-none')
       
     }
-
-    // if(target.matches('li')){
-    //   d.querySelectorAll('#compras_article_tabs li').forEach(li => li.classList.remove('active'))
-    //   d.querySelectorAll('#compras_article iframe').forEach(li => li.classList.add('d-none'))
-
-    //   const li = target.parentElement
-    //   const id = li.id
-
-    //   li.classList.add('active')
-
-    //   const iframe_id = id.replace('_li','_iframe')
-    //   d.getElementById(iframe_id).classList.remove('d-none')
-      
-    // }
     
   }
   
