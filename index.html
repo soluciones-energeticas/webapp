@@ -4,42 +4,58 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SOLES</title>
+    <link rel="icon" href="./assets/logo_soles.png" type="">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./compras/compras.css">
+    <link rel="stylesheet" href="./tesoreria/tesoreria.css">
   </head>
   <body class="d-flex">
-    <aside class="d-flex flex-column py-3 text-light">
-      <div class="d-flex align-items-center justify-content-center w-100 menu_option pt-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-        </svg>
-        <span class="flex-grow-1 ms-3">Compras</span>
+    <div class="body d-flex w-100 h-100"></div>
+    <div class="modal fade" id="modal_alertas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+              <span>Información</span>
+            </h1>
+          </div>
+          <div class="modal-body">
+            <span id="modal_body_span"></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
       </div>
-      <img id="logo_img" class="mt-auto mx-auto mb-2 p-2" src="./logo_soles.png" alt="">
-      <div class="user_info p-2 d-flex align-items-center justify-content-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+    </div>
+    <div id="toast_notification" class="toast position-absolute bottom-0 end-0 m-5" data-bs-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
         </svg>
-        <span class="fs-3 ms-2">Usuario</span>
+        <strong class="me-auto ms-2">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-    </aside>
-    <main class="flex-grow-1 my-3 me-2 rounded-3 overflow-hidden">
-      <article id="compras_article" class="w-100 h-100">
-        <ul id="compras_article_tabs" class="nav nav-tabs">
-          <li id="compras_article_requerimientos_li" class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Requerimientos</a>
-          </li>
-          <li id="compras_article_documentacion_li" class="nav-item">
-            <a class="nav-link" href="#">Documentación</a>
-          </li>
-        </ul>
-        <!-- <img src="undraw_access_denied_re_awnf.svg" alt=""> -->
-        <iframe id="compras_article_requerimientos_iframe" class="m-0 w-100 overflow-scroll rounded-bottom-3" src="https://script.google.com/macros/s/AKfycby2SsM2IzG7lM2czw6ICnFc5FiZP3Ip1Hks7UnONJ1rEMdsC4XKSNYDZe_nb1D2tcY9/exec"></iframe>
-        <iframe id="compras_article_documentacion_iframe" class="m-0 w-100 overflow-scroll rounded-bottom-3 d-none" src="https://script.google.com/macros/s/AKfycbw0t44neg_ANzRWRRTSz9aKx284g_pNqerCUMiZiQiOtlvnyhYjJASeRewypkfhmiofHw/exec"></iframe>
-      </article>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <script src="scripts.js"></script>
+      <div id="toast_body" class="toast-body d-flex justify-content-between align-items-center">
+        <span id="toast_body_span"></span>
+        <div id="toast_body_loading" class="spinner-border text-info" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
+  <script type="module" src="scripts.js"></script>
+  <script type="module" src="login.js"></script>
+  <script type="module" src="./compras/compras.js"></script>
+  <script type="module" src="./compras/requerimientos/functions_requerimientos.js"></script>
+  <script type="module" src="./compras/requerimientos/listeners_requerimientos.js"></script>
+  <script type="module" src="./compras/requerimientos/renders_requerimientos.js"></script>
 </html>

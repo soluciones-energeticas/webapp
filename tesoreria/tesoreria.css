@@ -1,0 +1,106 @@
+
+.tesoreria_div{
+  height: 100%;
+}
+
+.tesoreria_div #tesoreria_body_div{
+  max-height: 90%;
+}
+
+.tesoreria_div .aside_tesoreria{
+  width: 25%;
+}
+
+.tesoreria_div .main_tesoreria{
+  width: 75%;
+  height: 100%;
+}
+
+.tesoreria_div #depositos_table{
+  max-height: 300px;
+}
+
+.tesoreria_div #retiros_table_div{
+  max-height: 80%;
+  overflow: auto;
+}
+
+.tesoreria_div #depositos_table_div{
+  max-height: 150px;
+  overflow: auto;
+}
+
+.tesoreria_div #retiros_table{
+  table-layout: fixed;
+}
+
+.tesoreria_div #retiros_table tr:hover,
+.tesoreria_div #depositos_table tr:hover{
+  background: linear-gradient(to bottom right, lightblue, white);
+  cursor: pointer;
+}
+
+.tesoreria_div #retiros_table td{
+  overflow: hidden;
+}
+
+.tesoreria_div #retiros_table th,
+.tesoreria_div #depositos_table th{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: center;
+  background-color: rgb(68, 116, 206);
+  color: white;
+}
+
+.tesoreria_div #retiros_table th:nth-child(2){
+  width: 10%;
+}
+
+.tesoreria_div #retiros_table th:nth-child(3){
+  width:  10%;
+}
+
+.tesoreria_div #retiros_table th:nth-child(4){
+  width: 25%;
+}
+
+.tesoreria_div #retiros_table th:nth-child(5){
+  width: 35%;
+}
+
+.tesoreria_div #retiros_table th:nth-child(6){
+  width: 10%;
+}
+
+.tesoreria_div svg{
+  color: rgb(68, 116, 206);
+}
+
+.tesoreria_div #resumen{
+  background: linear-gradient(to bottom left, lightblue, white);
+}
+
+.tesoreria_div #depositos_table tbody tr,
+.tesoreria_div #retiros_table tbody tr{
+  border-bottom: 1px solid lightgray;
+}
+
+.tesoreria_div #resumen_ajuste_imp_transferencia_p,
+.tesoreria_div #resumen_balance_banco_p{
+  border: 0;
+  background-color: transparent;
+  color: blue;
+}
+
+.tesoreria_div #retiros_new_form{
+  overflow: hidden;
+}
+
+.tesoreria_div #retiros_table select{
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
