@@ -123,11 +123,13 @@ main.creando_nuevo{
 
 .h-transition{
   transition: max-height linear 0.5s;
+  transition: padding linear 0.3s;
   max-height: 500px;
 }
 
 .h-0{
   max-height: 0;
+  padding: 0;
 }
 
 

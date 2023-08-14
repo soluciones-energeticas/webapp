@@ -1,18 +1,30 @@
-export { setInputOptions,update_tables,afterDataTransacciones,afterDepositos,setTableDepositosContent,setTableRetirosContent }
+export { update_tables,afterDataTransacciones,afterDepositos,setTableDepositosContent,setTableRetirosContent,afterDataInicial,updateResumen }
 
 import { conciliacion_global } from "./getData.js";
 
 
-function setInputOptions(data){
-  
+function afterDataInicial(data){
+  conciliacion_global.balances_bancos = data.balances_bancos
+  conciliacion_global.ajustes_imp = data.ajustes_imp
+  conciliacion_global.inputs_editables = data.inputs_editables
+  conciliacion_global.estatus = data.estatus
+
   const empresa_input = document.querySelector('#empresa_input')
+  const fecha_input = document.querySelector('#fecha_input')
+  const retiros_empresa_input = document.querySelector('#retiros_empresa_input')
+  const depositos_empresa_input = document.querySelector('#depositos_empresa_input')
   let empresa_options = ''
   data.empresas.forEach(element => {
     empresa_options += `<option value="${element}">${element}</option>`
   });
   empresa_input.innerHTML = empresa_options
+  retiros_empresa_input.innerHTML = empresa_options
+  depositos_empresa_input.innerHTML = empresa_options
+
+  conciliacion_global.inputs_editables.forEach(input => {
+    document.querySelector(`#${input}`).disabled = false
+  })
   
-  conciliacion_global.estatus = data.estatus
   
 }
 
@@ -42,6 +54,8 @@ function afterDataTransacciones(data){
 
   setTableRetirosContent(transacciones)
 
+  empresa_input.disabled = false
+  fecha_input.disabled = false
   
 }
 
@@ -101,13 +115,14 @@ function setTableRetirosContent(transacciones){
     
     html_retiros += `
     <tr>
-      <td class="p-2 d-none">${retiro['id']}</td>
-      <td class="p-2">${retiro['fecha']}</td>
-      <td class="p-2">${retiro['no_cheque']}</td>
-      <td class="p-2">${retiro['beneficiario']}</td>
-      <td class="p-2">${retiro['concepto']}</td>
-      <td class="p-2">${Number(retiro['monto']).toLocaleString('en-US')}</td>
-      <td class="p-2"><select class="form-select form-select-sm">${options_html}</select></td>
+      <td class="p-2 d-none prop-id">${retiro['id']}</td>
+      <td class="p-2 prop-fecha">${retiro['fecha']}</td>
+      <td class="p-2 prop-no_cheque">${retiro['no_cheque']}</td>
+      <td class="p-2 prop-beneficiario">${retiro['beneficiario']}</td>
+      <td class="p-2 prop-concepto">${retiro['concepto']}</td>
+      <td class="p-2 prop-monto">${Number(retiro['monto']).toLocaleString('en-US')}</td>
+      <td class="p-2 prop-estatus"><select class="form-select form-select-sm">${options_html}</select></td>
+      <td class="d-none prop-empresa">${retiro['empresa']}</td>
     </tr>
     `
     
@@ -115,4 +130,83 @@ function setTableRetirosContent(transacciones){
   
   retiros_table.querySelector('tbody').innerHTML = ''
   retiros_table.querySelector('tbody').innerHTML = html_retiros
+}
+
+function updateResumen(){
+  const resumen_balance_banco_p = document.querySelector('#resumen_balance_banco_p')
+  const balance_anterior_libro_p = document.querySelector('#balance_anterior_libro_p')
+  const resumen_depositos_p = document.querySelector('#resumen_depositos_p')
+  const resumen_pagos_emitidos_p = document.querySelector('#resumen_pagos_emitidos_p')
+  const resumen_ajuste_imp_transferencia_p = document.querySelector('#resumen_ajuste_imp_transferencia_p')
+  const resumen_balance_libro_p = document.querySelector('#resumen_balance_libro_p')
+  const resumen_transitos_p = document.querySelector('#resumen_transitos_p')
+  const resumen_entregados_p = document.querySelector('#resumen_entregados_p')
+  const resumen_retenidos_p = document.querySelector('#resumen_retenidos_p')
+  const resumen_vencidos_p = document.querySelector('#resumen_vencidos_p')
+  const resumen_ajuste_nulo_p = document.querySelector('#resumen_ajuste_nulo_p')
+  const resumen_balance_libro_comprobacion_p = document.querySelector('#resumen_balance_libro_comprobacion_p')
+  const resumen_comprobacion_p = document.querySelector('#resumen_comprobacion_p')
+  const fecha_input = document.querySelector('#fecha_input')
+  const empresa_input = document.querySelector('#empresa_input')
+
+  resumen_balance_banco_p.value = ''
+  balance_anterior_libro_p.textContent = '0.00'
+  resumen_depositos_p.textContent = '0.00'
+  resumen_pagos_emitidos_p.textContent = '0.00'
+  resumen_ajuste_imp_transferencia_p.value = ''
+  resumen_balance_libro_p.textContent = '0.00'
+  resumen_transitos_p.textContent = '0.00'
+  resumen_entregados_p.textContent = '0.00'
+  resumen_retenidos_p.textContent = '0.00'
+  resumen_vencidos_p.textContent = '0.00'
+  resumen_ajuste_nulo_p.textContent = '0.00'
+  resumen_balance_libro_comprobacion_p.textContent = '0.00'
+  resumen_comprobacion_p.textContent = '0.00'
+  fecha_input.textContent = '0.00'
+
+  if(!fecha_input.value || !empresa_input.value) return
+  
+  const fecha_arr = fecha_input.value.split('-')
+  const dia = Number(fecha_arr[2])
+  const mes = Number(fecha_arr[1]) - 1
+  const ano = Number(fecha_arr[0])
+  const fechaActual = fecha_input.value
+  const fechaAnterior = JSON.stringify(new Date(ano,mes,dia - 1)).split('T')[0].replace('"',"")
+  
+  const totalDepositos = conciliacion_global.depositos.filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
+    return previus + Number(current['monto'])
+  },0)
+
+  const totalPagosEmitidos = conciliacion_global.dataEmpresas[empresa_input.value].filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
+    return previus + Number(current['monto'])
+  },0)
+
+  const totalAjusteImp = conciliacion_global.ajustes_imp.filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
+    return previus + Number(current['monto'])
+  },0)
+
+  const totalBalanceBanco = conciliacion_global.balances_bancos.filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
+    return previus + Number(current['balance'])
+  },0)
+
+  resumen_depositos_p.textContent = totalDepositos.toLocaleString('en-US')
+  resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toLocaleString('en-US')
+  resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toLocaleString('en-US')
+  resumen_balance_libro_p.textContent = (totalDepositos - totalPagosEmitidos - totalAjusteImp).toLocaleString('en-US')
+  resumen_balance_banco_p.value = totalBalanceBanco.toLocaleString('en-US')
+  
+  const totalDepositos_anterior = conciliacion_global.depositos.filter(e => e['fecha'] == fechaAnterior).reduce((previus,current) => {
+    return previus + Number(current['monto'])
+  },0)
+  
+  const totalPagosEmitidos_anterior = conciliacion_global.dataEmpresas[empresa_input.value].filter(e => e['fecha'] == fechaAnterior).reduce((previus,current) => {
+    return previus + Number(current['monto'])
+  },0)
+  
+  const totalAjusteImp_anterior = conciliacion_global.ajustes_imp.filter(e => e['fecha'] == fechaAnterior).reduce((previus,current) => {
+    return previus + Number(current['monto'])
+  },0)
+  
+  balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toLocaleString('en-US')
+  
 }

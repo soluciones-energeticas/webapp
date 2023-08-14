@@ -94,8 +94,10 @@
   color: blue;
 }
 
-.tesoreria_div #retiros_new_form{
+.tesoreria_div #retiros_new_form,
+.tesoreria_div #depositos_table_new_form{
   overflow: hidden;
+  background: linear-gradient(to bottom left, lightblue, white);
 }
 
 .tesoreria_div #retiros_table select{

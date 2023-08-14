@@ -1,5 +1,5 @@
 
-import { setInputOptions,afterDataTransacciones,afterDepositos } from "./setData.js"
+import { afterDataTransacciones,afterDepositos,afterDataInicial } from "./setData.js"
 
 window.soleswebapp.tesoreria = { conciliacion : {}}
 
@@ -29,10 +29,8 @@ function getDataInicial(){
    .then(ans => ans.json())
    .then(ans => {
       if(ans.estatus){
-        setInputOptions(ans.data)
-        conciliacion_global.balances_bancos = ans.data.balances_bancos
-        conciliacion_global.ajustes_imp = ans.data.ajustes_imp
         console.log('Listo solicitud inicial')
+        afterDataInicial(ans.data)
       }else{
         console.log(ans.message)
       }

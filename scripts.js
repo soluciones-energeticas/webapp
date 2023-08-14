@@ -5,3 +5,4 @@ const toast = new bootstrap.Toast(document.getElementById('toast_notification'))
 
 window.soleswebapp = {}
 
+
