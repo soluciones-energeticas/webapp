@@ -9,7 +9,7 @@ function showTesoreriaSection(){
   const main = document.querySelector('main')
 
   main.innerHTML = `
-  <div class="tesoreria_div d-flex flex-column">
+  <div class="tesoreria_div d-flex flex-column overflow-auto">
       <h1 class="fw-bold fs-3 ps-2 pt-2">Conciliación de bancos</h1>
       <div id="tesoreria_body_div" class="w-100 flex-grow-1 d-flex">
         <div class="aside_tesoreria h-100 d-flex flex-column ps-2">
@@ -17,16 +17,16 @@ function showTesoreriaSection(){
             <option selected>Selecciona una empresa</option>
           </select>
           <div id="controles_fecha_div" class="d-flex align-items-center mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+            <svg id="day_before_btn" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
               <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
             </svg>
             <input disabled type="date" class="form-control form-control-sm text-center mx-3" id="fecha_input">
-            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+            <svg id="day_after_btn" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
               <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
             </svg>
           </div>
-          <p id="cuadre_header" class="fw-bold fs-5 m-0 mt-2">Cuadre</p>
-          <div id="resumen" class="rounded-3 p-2 shadow w-100">
+          <div id="resumen" class="rounded-3 p-2 shadow w-100 mt-2">
+            <p id="cuadre_header" class="fw-bold fs-5 m-0 mb-1">Cuadre</p>
             <table id="table_resumen" class="w-100">
               <tr>
                 <th>
@@ -86,7 +86,7 @@ function showTesoreriaSection(){
               </tr>
               <tr>
                 <th>
-                  <p class="m-0 fw-normal text-start ms-auto resumen_subp">Entregados</p>
+                  <p class="m-0 fw-normal text-start ms-auto resumen_subp ps-3">Entregados</p>
                 </th>
                 <td>
                   <p class="m-0 fw-normal text-start" id="resumen_entregados_p">0.00</p>
@@ -94,7 +94,7 @@ function showTesoreriaSection(){
               </tr>
               <tr>
                 <th>
-                  <p class="m-0 fw-normal text-start ms-auto resumen_subp">Retenidos</p>
+                  <p class="m-0 fw-normal text-start ms-auto resumen_subp ps-3">Retenidos</p>
                 </th>
                 <td>
                   <p class="m-0 fw-normal text-start" id="resumen_retenidos_p">0.00</p>
@@ -102,7 +102,7 @@ function showTesoreriaSection(){
               </tr>
               <tr>
                 <th>
-                  <p class="m-0 fw-normal text-start ms-auto resumen_subp">Vencidos</p>
+                  <p class="m-0 fw-normal text-start ms-auto resumen_subp ps-3">Vencidos</p>
                 </th>
                 <td>
                   <p class="m-0 fw-normal text-start" id="resumen_vencidos_p">0.00</p>
@@ -133,9 +133,9 @@ function showTesoreriaSection(){
                 </td>
               </tr>
             </table>
-            <button disabled id="resumen_guardar_btn" type="button" class="btn btn-primary btn-sm mt-2 w-100">
-              <span class="loading visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
-              <span class="btn_text" role="status">Guardar cuadre</span>
+            <button disabled id="resumen_guardar_btn" type="button" class="btn btn-primary btn-sm mt-3 w-100">
+              <span class="loading spinner-border spinner-border-sm" aria-hidden="true"></span>
+              <span class="btn_text visually-hidden" role="status">Guardar cuadre</span>
             </button>
           </div>
           <p id="depositos_header" class="fw-bold fs-5 mt-2">Depósitos</p>
@@ -303,7 +303,8 @@ function showTesoreriaSection(){
   const retiros_guardar_btn = document.querySelector('#retiros_guardar_btn')
   const resumen_ajuste_imp_transferencia_p = document.querySelector('#resumen_ajuste_imp_transferencia_p')
   const resumen_guardar_btn = document.querySelector('#resumen_guardar_btn')
-  const cuadre_header = document.querySelector('#cuadre_header')
+  const day_before_btn = document.querySelector('#day_before_btn')
+  const day_after_btn = document.querySelector('#day_after_btn')
   const cuadre = document.querySelector('#resumen')
   const depositos_table = document.querySelector('#depositos_table')
   const depositos_header = document.querySelector('#depositos_header')
@@ -329,7 +330,7 @@ function showTesoreriaSection(){
   retiros_nuevo_btn.addEventListener('click', e => {
     retiros_new_form.classList.toggle('h-0')
     retiros_new_form.classList.toggle('p-4')
-    retiros_table_header_div.classList.toggle('mb-4')
+    retiros_table_header_div.classList.toggle('mb-2')
     retiros_table_div.classList.toggle('d-none')
   })
   
@@ -357,13 +358,6 @@ function showTesoreriaSection(){
 
   document.addEventListener('change', e => {
     const target = e.target
-
-    if(target === empresa_input || target === fecha_input){
-      document.querySelector('#buscar_depositos_input').value = ''
-      document.querySelector('#buscar_retiros_input').value = ''
-      update_tables()
-      updateResumen()
-    }
     
     if(target.matches('#retiros_table tbody td.prop-estatus select')){
       const estatus = target.value
@@ -374,6 +368,15 @@ function showTesoreriaSection(){
     }
     
   })
+
+  empresa_input.addEventListener('change',e => {
+    changeEvent_fecha_empresa()
+  })
+
+  fecha_input.addEventListener('change',e => {
+    changeEvent_fecha_empresa()
+  })
+
 
   document.addEventListener('input', e => {
     const target = e.target
@@ -397,6 +400,34 @@ function showTesoreriaSection(){
       
     }
     
+  })
+
+  day_before_btn.addEventListener('click', e => {
+    const empresa = empresa_input.value
+    let fechaActual = fecha_input.value
+    if(!fechaActual) fechaActual = conciliacion_global.dataEmpresas[empresa][0]?.fecha
+
+    const fecha_arr = fechaActual.split('-')
+    const dia = Number(fecha_arr[2])
+    const mes = Number(fecha_arr[1]) - 1
+    const ano = Number(fecha_arr[0])
+    const fechaAnterior = JSON.stringify(new Date(ano,mes,dia - 1)).split('T')[0].replace('"',"")
+    fecha_input.value = fechaAnterior
+    fecha_input.dispatchEvent(new Event('change'))
+  })
+
+  day_after_btn.addEventListener('click', e => {
+    const empresa = empresa_input.value
+    let fechaActual = fecha_input.value
+    if(!fechaActual) fechaActual = conciliacion_global.dataEmpresas[empresa][0]?.fecha
+
+    const fecha_arr = fechaActual.split('-')
+    const dia = Number(fecha_arr[2])
+    const mes = Number(fecha_arr[1]) - 1
+    const ano = Number(fecha_arr[0])
+    const fechaDespues = JSON.stringify(new Date(ano,mes,dia + 1)).split('T')[0].replace('"',"")
+    fecha_input.value = fechaDespues
+    fecha_input.dispatchEvent(new Event('change'))
   })
 
   getDataInicial()
@@ -473,5 +504,12 @@ function createSearchTimer(timerProp,target){
 
   conciliacion_global.timers[timerProp].push(timer)
 
+}
+
+function changeEvent_fecha_empresa(){
+  document.querySelector('#buscar_depositos_input').value = ''
+  document.querySelector('#buscar_retiros_input').value = ''
+  update_tables()
+  updateResumen()
 }
 

@@ -14,9 +14,11 @@ function afterDataInicial(data){
   const retiros_empresa_input = document.querySelector('#retiros_empresa_input')
   const depositos_empresa_input = document.querySelector('#depositos_empresa_input')
   let empresa_options = ''
+
   data.empresas.forEach(element => {
     empresa_options += `<option value="${element}">${element}</option>`
   });
+  
   empresa_input.innerHTML = empresa_options
   retiros_empresa_input.innerHTML = empresa_options
   depositos_empresa_input.innerHTML = empresa_options
@@ -34,9 +36,10 @@ function update_tables(){
 }
 
 function afterDataTransacciones(data){
-  const empresa = document.querySelector('#empresa_input').value
+  const empresa_input = document.querySelector('#empresa_input')
   const fecha_input = document.querySelector('#fecha_input')
-  const retiros_table = document.querySelector('#retiros_table')
+  const resumen_guardar_btn = document.querySelector('#resumen_guardar_btn')
+  const empresa = empresa_input.value
   let diaFiltro
   
   if(data){
@@ -53,9 +56,12 @@ function afterDataTransacciones(data){
   const transacciones = conciliacion_global.dataEmpresas[empresa].filter(retiro => retiro.fecha == diaFiltro)
 
   setTableRetirosContent(transacciones)
-
+  
   empresa_input.disabled = false
   fecha_input.disabled = false
+  resumen_guardar_btn.disabled = false
+  resumen_guardar_btn.querySelector('.loading').classList.add('visually-hidden')
+  resumen_guardar_btn.querySelector('.btn_text').classList.remove('visually-hidden')
   
 }
 
@@ -172,41 +178,94 @@ function updateResumen(){
   const ano = Number(fecha_arr[0])
   const fechaActual = fecha_input.value
   const fechaAnterior = JSON.stringify(new Date(ano,mes,dia - 1)).split('T')[0].replace('"',"")
+  let totalDepositos = 0,
+  totalPagosEmitidos = 0,
+  totalAjusteImp = 0,
+  totalBalanceBanco = 0,
+  totalDepositos_anterior = 0,
+  totalPagosEmitidos_anterior = 0,
+  totalAjusteImp_anterior = 0,
+  totalTransito = 0,
+  totalRetenido = 0,
+  totalVencido = 0,
+  totalEntregado = 0,
+  totalNulo = 0
+
+  const estatus_types = {
+    transito : ["Retenido","Entregado","Vencido"]
+  }
+
+  conciliacion_global.dataEmpresas[empresa_input.value].forEach(retiro => {
+    if(retiro.fecha == fechaActual){
+      totalPagosEmitidos += Number(retiro.monto)
+    }
+
+    if(retiro.fecha == fechaAnterior){
+      totalPagosEmitidos_anterior += Number(retiro.monto)
+    }
+
+    if(estatus_types.transito.includes(retiro.estatus)){
+      totalTransito += Number(retiro.monto)
+    }
+
+    if(retiro.estatus == 'Retenido'){
+      totalRetenido += Number(retiro.monto)
+    }
+
+    if(retiro.estatus == 'Vencido'){
+      totalVencido += Number(retiro.monto)
+    }
+
+    if(retiro.estatus == 'Entregado'){
+      totalEntregado += Number(retiro.monto)
+    }
+
+    if(retiro.estatus == 'Nulo'){
+      totalNulo += Number(retiro.monto)
+    }
+    
+  })
+
+  conciliacion_global.depositos.forEach(deposito => {
+    if(deposito.fecha == fechaActual){
+      totalDepositos += Number(deposito.monto)
+    }
+
+    if(deposito.fecha == fechaAnterior){
+      totalDepositos_anterior += Number(deposito.monto)
+    }
+    
+  })
+
+  conciliacion_global.ajustes_imp.forEach(ajuste => {
+    if(ajuste.fecha == fechaActual){
+      totalAjusteImp += Number(ajuste.monto)
+    }
+    
+    if(ajuste.fecha == fechaAnterior){
+      totalAjusteImp_anterior += Number(ajuste.monto)
+    }
+    
+  })
+
+  conciliacion_global.balances_bancos.forEach(balance => {
+    if(balance.fecha == fechaActual){
+      totalBalanceBanco += Number(balance.balance)
+    }
+    
+  })
   
-  const totalDepositos = conciliacion_global.depositos.filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
-    return previus + Number(current['monto'])
-  },0)
-
-  const totalPagosEmitidos = conciliacion_global.dataEmpresas[empresa_input.value].filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
-    return previus + Number(current['monto'])
-  },0)
-
-  const totalAjusteImp = conciliacion_global.ajustes_imp.filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
-    return previus + Number(current['monto'])
-  },0)
-
-  const totalBalanceBanco = conciliacion_global.balances_bancos.filter(e => e['fecha'] == fechaActual).reduce((previus,current) => {
-    return previus + Number(current['balance'])
-  },0)
-
+  balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toLocaleString('en-US')
   resumen_depositos_p.textContent = totalDepositos.toLocaleString('en-US')
   resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toLocaleString('en-US')
   resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toLocaleString('en-US')
   resumen_balance_libro_p.textContent = (totalDepositos - totalPagosEmitidos - totalAjusteImp).toLocaleString('en-US')
   resumen_balance_banco_p.value = totalBalanceBanco.toLocaleString('en-US')
-  
-  const totalDepositos_anterior = conciliacion_global.depositos.filter(e => e['fecha'] == fechaAnterior).reduce((previus,current) => {
-    return previus + Number(current['monto'])
-  },0)
-  
-  const totalPagosEmitidos_anterior = conciliacion_global.dataEmpresas[empresa_input.value].filter(e => e['fecha'] == fechaAnterior).reduce((previus,current) => {
-    return previus + Number(current['monto'])
-  },0)
-  
-  const totalAjusteImp_anterior = conciliacion_global.ajustes_imp.filter(e => e['fecha'] == fechaAnterior).reduce((previus,current) => {
-    return previus + Number(current['monto'])
-  },0)
-  
-  balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toLocaleString('en-US')
+  resumen_transitos_p.textContent = totalTransito.toLocaleString('en-US')
+  resumen_entregados_p.textContent = totalEntregado.toLocaleString('en-US')
+  resumen_retenidos_p.textContent = totalRetenido.toLocaleString('en-US')
+  resumen_vencidos_p.textContent = totalVencido.toLocaleString('en-US')
+  resumen_ajuste_nulo_p.textContent = totalNulo.toLocaleString('en-US')
+
   
 }

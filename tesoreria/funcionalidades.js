@@ -178,6 +178,8 @@ function actualizarEstatus(empresa,id,estatus){
       return
     }
 
+    conciliacion_global.dataEmpresas[empresa].find(e => e.id == id).estatus = estatus
+
     console.log('Actualizado')
 
 

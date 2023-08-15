@@ -106,3 +106,10 @@
   cursor: pointer;
 }
 
+.tesoreria_div #table_resumen tr:hover{
+  /* transform: scale(1.05) translate(8px,0); */
+  color: blue;
+  background-color: white;
+  cursor: pointer;
+}
+
