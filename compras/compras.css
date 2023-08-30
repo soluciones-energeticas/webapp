@@ -1,3 +1,62 @@
+#sections_app_compras__requerimientos_table{
+  white-space: nowrap;
+  table-layout: fixed;
+  min-width: 100%;
+  overflow: auto;
+}
+
+#sections_app_compras__requerimientos_table [prop="id"]{
+  display: none;
+}
+
+#sections_app_compras__requerimientos_table tr > *{
+  width: 1px;
+  padding: 5px;
+}
+
+#sections_app_compras__requerimientos_table tr{
+  border-bottom: 1px solid lightgrey;
+}
+
+#sections_app_compras__requerimientos_table tr:hover{
+  background-color: rgb(220,220,220);
+  cursor: pointer;
+}
+
+#sections_app_compras__requerimientos_table thead tr{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+#sections_app_compras__requerimientos_table tr.editando {
+  animation: editando 1.5s infinite;
+}
+
+@keyframes editando {
+  0% {
+    background-color: rgba(0,0,255,0);
+  }
+  50% {
+    background-color: rgba(0,0,255,0.20);
+  }
+}
+
+#sections_app_compras__requerimientos_table tr.eliminando {
+  animation: deleting 0.3s infinite;
+}
+
+@keyframes deleting {
+  0% {
+    background-color: rgba(255,0,0,0);
+  }
+  50% {
+    background-color: rgba(255,0,0,0.20);
+  }
+}
+
+/* 
+
 .compras_main #loading_img{
   height: 100%;
 }
@@ -67,9 +126,7 @@
   padding: 7px;
 }
 
-.compras_main tr :first-child{
-  display: none;
-}
+
 
 .compras_main tbody tr{
   border-bottom: 1px solid lightgrey;
@@ -99,4 +156,6 @@
 .compras_main main.creando_nuevo .form_section{
   z-index: 10;
   background-color: white;
-}
+} 
+
+*/

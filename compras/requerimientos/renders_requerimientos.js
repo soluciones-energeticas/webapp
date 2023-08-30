@@ -63,14 +63,19 @@ function hide_edition_form(){
   document.querySelector('#form_contabilidad_fieldset').classList.remove('d-none')
   document.querySelector('#form_tesoreria_fieldset').classList.remove('d-none')
   document.querySelector('main').classList.remove('creando_nuevo')
+  document.querySelector('#app_main').classList.add('bg-white')
   if(requerimientos_global.active_table_tr) requerimientos_global.active_table_tr.classList.remove('active')
 }
 
 function show_edition_form(){
   const form_section = document.querySelector('.form_section')
+
   document.querySelector('#edition_form').reset()
-  form_section.classList.remove('d-none')
   document.querySelector('.form_btn_section').classList.remove('d-none')
   document.querySelector('#resumen_section').classList.add('d-none')
+  document.querySelector('#app_main').classList.remove('bg-white')
+
+  
+  form_section.classList.remove('d-none')
   form_section.scroll(0,0)
 }

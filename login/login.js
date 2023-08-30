@@ -1,13 +1,17 @@
+export { showLogin,hideLogin,showApp,hideApp } 
 
-import {showComprasSection} from './compras/compras.js'
-import { showTesoreriaSection } from './tesoreria/tesoreria.js'
-// import { modal } from './scripts.js'
+import { showComprasSection,hideComprasSection,setComprasSection } from '../compras/compras.js'
+import { showTesoreriaSection } from '../tesoreria/tesoreria.js'
 
-const body = document.querySelector('body .body')
+const main = document.querySelector('main')
 
-function showLogin(){
+function setLogin(){
+  const div = document.createElement('div')
+  div.id = 'login'
+  div.classList.add('w-100','h-100','d-flex','d-none')
+  main.appendChild(div)
 
-  body.innerHTML = `
+  div.innerHTML = `
   <aside id="login_aside" class="">
     <div class="login_bg_div login"></div>
     <form action="#" class="login_form d-flex flex-column p-4 h-100">
@@ -22,9 +26,9 @@ function showLogin(){
         <label for="pass_input" class="form-label">Contraseña</label>
         <input type="password" class="form-control" id="pass_input">
       </div>
-      <button id="login_btn" type="button" class="btn btn-primary mt-3">
-        <span id="login_btn_spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-        <span id="login_btn_text">Iniciar sesión</span>
+      <button id="login_btn" class="btn btn-primary mt-3" type="button">
+        <span class="spinner-border spinner-border-sm visually-hidden" aria-hidden="true"></span>
+        <span class="" role="status">Iniciar sesión</span>
       </button>
     </form>
   </aside>
@@ -34,7 +38,12 @@ function showLogin(){
   const pass_input = document.querySelector('#pass_input')
   
   login_btn.addEventListener('click', e => {
-    
+    login_btn.disabled = true
+    login_btn.querySelectorAll('span').forEach((e,n) => {
+      if(n == 0) e.classList.remove('visually-hidden')
+      else e.classList.add('visually-hidden')
+    })
+  
     const url = 'https://script.google.com/macros/s/AKfycbwNNT2Cfx9PHB6p9Awm_AdxvcPZwOFp7pAju01aQWAVWF03nKvXcU3ZCPCuB2vKDSCp/exec'
     const jsonData = {
       user : usuario_input.value,
@@ -51,10 +60,18 @@ function showLogin(){
     fetch(url,options)
     .then(res => res.json())
     .then(res => {
-       if(res.estatus){
-        body.innerHTML = ''
+      login_btn.disabled = false
+      pass_input.value = ''
+      login_btn.querySelectorAll('span').forEach((e,n) => {
+        if(n == 0) e.classList.add('visually-hidden')
+        else e.classList.remove('visually-hidden')
+      })
+      
+      if(res.estatus){
         sessionStorage.setItem('soles_webapp_session',res.data.newToken)
-        showAppAside(res.data)
+        hideLogin()
+        setApp(res.data)
+        showApp()
         
       }else{
         document.querySelector('#login_error').textContent = 'Usuario y/o contraseña inválidos'
@@ -64,14 +81,19 @@ function showLogin(){
     .catch(err => console.log(err))
     
   })
-  
-  
-  
+}
+
+function showLogin(){
+  document.getElementById('login').classList.remove('d-none')
+}
+
+function hideLogin(){
+  document.getElementById('login').classList.add('d-none')
 }
 
 function validateAccess(){
   const session = sessionStorage.getItem('soles_webapp_session')
-  
+
   if(!session){
     showLogin()
     return
@@ -94,8 +116,8 @@ function validateAccess(){
    .then(res => res.json())
    .then(res => {
      if(res.estatus){
-      body.innerHTML = ''
-      showAppAside(res.data)
+      setApp(res.data)
+      showApp()
     }else{
       showLogin()
     }
@@ -104,41 +126,52 @@ function validateAccess(){
   
 }
 
-function showAppAside(data_res){
-  body.innerHTML = `
+function setApp(data_res){
+  const div = document.createElement('div')
+  div.id = 'app'
+  div.classList.add('w-100','h-100','d-flex','d-none')
+  main.appendChild(div)
+
+  div.innerHTML = `
   <aside id="app_aside" class="d-flex flex-column text-white flex-shrink-0">
-    <div class="login_bg_div"></div>
-    <div class="app_bg_div"></div>
     <img id="logo_img" class="mt-auto mx-auto mb-2 p-2" src="./assets/logo_soles.png" alt="">
     <div class="user_info p-2 d-flex align-items-center justify-content-center mb-3">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
       </svg>
-      <span class="fs-3 ms-2">Usuario</span>
+      <span id="user_name" class="fs-3 ms-3">${data_res.username}</span>
     </div>
   </aside>
-  <main class="flex-grow-1 p-3 m-3 ms-0 rounded-3"></main>`
+  <div id="app_main" class="flex-grow-1 p-3 m-3 ms-0 rounded-3 bg-white"></div>`
 
   if(data_res.secciones_permitidas.includes('compras_section')){
     const newElement = document.createElement('div')
-    const container = body.querySelector('#app_aside')
+    
+    newElement.classList.add('d-flex','align-items-center','justify-content-center','w-100','menu_option','mt-3')
+    const container = main.querySelector('#app_aside')
     const element = container.querySelector('#logo_img')
     container.insertBefore(newElement,element)
     
-    newElement.outerHTML = `
-    <div class="d-flex align-items-center justify-content-center w-100 menu_option mt-3">
+    newElement.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
         <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
       </svg>
       <span class="flex-grow-1 ms-3">Compras</span>
-    </div>`
-    
+    `
+    setComprasSection(data_res)
+
+    newElement.addEventListener('click', () => {
+      showComprasSection()
+    })
+
   }
 
+  /* 
+  
   if(data_res.secciones_permitidas.includes('tesoreria_section')){
     const newElement = document.createElement('div')
-    const container = body.querySelector('#app_aside')
+    const container = main.querySelector('#app_aside')
     const element = container.querySelector('#logo_img')
     container.insertBefore(newElement,element)
     
@@ -153,7 +186,13 @@ function showAppAside(data_res){
       <span class="flex-grow-1 ms-3">Tesoreria</span>
     </div>`
     
-  }
+  } 
+  
+  */
+
+  /* const sections_ids = [
+    'app_section__compras'
+  ]
 
   document.querySelectorAll('.menu_option').forEach(option => {
     option.addEventListener('click', () => {
@@ -162,8 +201,14 @@ function showAppAside(data_res){
 
       switch(section){
         case 'Compras':
+          sections_ids.forEach(id => {
+            document.getElementById(id).classList.add('d-none')
+          })
+
           showComprasSection()
+
           break
+
         case 'Tesoreria':
           showTesoreriaSection()
           break
@@ -172,7 +217,7 @@ function showAppAside(data_res){
       
     })
     
-  })
+  }) */
 
   document.addEventListener('click', e => {
     const target = e.target
@@ -185,6 +230,15 @@ function showAppAside(data_res){
   })
   
 }
+
+function showApp(){
+  document.getElementById('app').classList.remove('d-none')
+}
+
+function hideApp(){
+  document.getElementById('app').classList.add('d-none')
+}
   
+setLogin()
 validateAccess()
 

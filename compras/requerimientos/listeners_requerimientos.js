@@ -20,6 +20,7 @@ function setRequerimientosListeners(){
     form_contabilidad_fieldset.classList.add('d-none')
     form_tesoreria_fieldset.classList.add('d-none')
     document.querySelector('main').classList.add('creando_nuevo')
+    
   })
   
   btn_guardar.addEventListener('click', e => {
@@ -80,6 +81,11 @@ function setRequerimientosListeners(){
   
   document.addEventListener('click', (e) => {
     const target = e.target
+
+    const edition_div = document.querySelector('#compras_requerimientos_article #edition_div')
+
+    if(!edition_div.contains(target)) hide_edition_form()
+
   
     if(target.matches('tbody tr td')){
       hide_edition_form()
