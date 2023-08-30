@@ -28,6 +28,7 @@ function getDataInicial(){
   fetch(url,options)
    .then(ans => ans.json())
    .then(ans => {
+      console.log(ans)
       if(ans.estatus){
         console.log('Listo solicitud inicial')
         afterDataInicial(ans.data)
@@ -58,6 +59,7 @@ function getDataTransacciones(){
   fetch(url,options)
    .then(ans => ans.json())
    .then(ans => {
+      console.log(ans)
       if(ans.estatus){
         console.log('Listo transacciones')
         afterDataTransacciones(ans.data)

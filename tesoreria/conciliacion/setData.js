@@ -41,18 +41,18 @@ function afterDataTransacciones(data){
   const resumen_guardar_btn = document.querySelector('#resumen_guardar_btn')
   const empresa = empresa_input.value
   let diaFiltro
-  
+
   if(data){
     data.dataEmpresas.forEach(e => conciliacion_global.dataEmpresas[e.empresa] = e.transacciones)
   }
 
   if(!(conciliacion_global.dataEmpresas[empresa])) return
-  
+
   if(fecha_input.value) diaFiltro = fecha_input.value
   else diaFiltro = conciliacion_global.dataEmpresas[empresa][0]?.fecha
-  
+
   if(!diaFiltro) return
-  
+
   const transacciones = conciliacion_global.dataEmpresas[empresa].filter(retiro => retiro.fecha == diaFiltro)
 
   setTableRetirosContent(transacciones)
@@ -259,13 +259,17 @@ function updateResumen(){
   resumen_depositos_p.textContent = totalDepositos.toLocaleString('en-US')
   resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toLocaleString('en-US')
   resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toLocaleString('en-US')
-  resumen_balance_libro_p.textContent = (totalDepositos - totalPagosEmitidos - totalAjusteImp).toLocaleString('en-US')
+  resumen_balance_libro_p.textContent = ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos - totalAjusteImp).toLocaleString('en-US')
   resumen_balance_banco_p.value = totalBalanceBanco.toLocaleString('en-US')
   resumen_transitos_p.textContent = totalTransito.toLocaleString('en-US')
   resumen_entregados_p.textContent = totalEntregado.toLocaleString('en-US')
   resumen_retenidos_p.textContent = totalRetenido.toLocaleString('en-US')
   resumen_vencidos_p.textContent = totalVencido.toLocaleString('en-US')
   resumen_ajuste_nulo_p.textContent = totalNulo.toLocaleString('en-US')
+
+  resumen_balance_libro_comprobacion_p.textContent = (totalBalanceBanco - totalTransito + totalNulo).toLocaleString('en-US')
+
+  resumen_comprobacion_p.textContent = ( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos - totalAjusteImp) ).toLocaleString('en-US')
 
   
 }
