@@ -291,6 +291,8 @@ function updateResumen(){
   })
   
   balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toLocaleString('en-US')
+  console.log(totalDepositos_anterior)
+  console.log(totalPagosEmitidos_anterior)
   resumen_depositos_p.textContent = totalDepositos.toLocaleString('en-US')
   resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toLocaleString('en-US')
   resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toLocaleString('en-US')
@@ -304,7 +306,7 @@ function updateResumen(){
 
   resumen_balance_libro_comprobacion_p.textContent = (totalBalanceBanco - totalTransito + totalNulo).toLocaleString('en-US')
 
-  resumen_comprobacion_p.textContent = ( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos - totalAjusteImp) ).toLocaleString('en-US')
+  resumen_comprobacion_p.textContent = ( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp) ).toLocaleString('en-US')
 
   
 }
