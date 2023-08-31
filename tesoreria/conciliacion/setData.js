@@ -158,7 +158,6 @@ function updateResumen(){
   const resumen_transitos_p = document.querySelector('#resumen_transitos_p')
   const resumen_entregados_p = document.querySelector('#resumen_entregados_p')
   const resumen_retenidos_p = document.querySelector('#resumen_retenidos_p')
-  // const resumen_vencidos_p = document.querySelector('#resumen_vencidos_p')
   const resumen_ajuste_nulo_p = document.querySelector('#resumen_ajuste_nulo_p')
   const resumen_balance_libro_comprobacion_p = document.querySelector('#resumen_balance_libro_comprobacion_p')
   const resumen_comprobacion_p = document.querySelector('#resumen_comprobacion_p')
@@ -174,7 +173,6 @@ function updateResumen(){
   resumen_transitos_p.textContent = '0.00'
   resumen_entregados_p.textContent = '0.00'
   resumen_retenidos_p.textContent = '0.00'
-  // resumen_vencidos_p.textContent = '0.00'
   resumen_ajuste_nulo_p.textContent = '0.00'
   resumen_balance_libro_comprobacion_p.textContent = '0.00'
   resumen_comprobacion_p.textContent = '0.00'
@@ -290,23 +288,20 @@ function updateResumen(){
     
   })
   
-  balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toLocaleString('en-US')
-  console.log(totalDepositos_anterior)
-  console.log(totalPagosEmitidos_anterior)
-  resumen_depositos_p.textContent = totalDepositos.toLocaleString('en-US')
-  resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toLocaleString('en-US')
-  resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toLocaleString('en-US')
-  resumen_balance_libro_p.textContent = ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp).toLocaleString('en-US')
-  resumen_balance_banco_p.value = totalBalanceBanco.toLocaleString('en-US')
-  resumen_transitos_p.textContent = totalTransito.toLocaleString('en-US')
-  resumen_entregados_p.textContent = totalEntregado.toLocaleString('en-US')
-  resumen_retenidos_p.textContent = totalRetenido.toLocaleString('en-US')
-  // resumen_vencidos_p.textContent = totalVencido.toLocaleString('en-US')
-  resumen_ajuste_nulo_p.textContent = totalNulo.toLocaleString('en-US')
+  balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toFixed(2).toLocaleString('en-US')
+  resumen_depositos_p.textContent = totalDepositos.toFixed(2).toLocaleString('en-US')
+  resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toFixed(2).toLocaleString('en-US')
+  resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toFixed(2).toLocaleString('en-US')
+  resumen_balance_libro_p.textContent = ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp).toFixed(2).toLocaleString('en-US')
+  resumen_balance_banco_p.value = totalBalanceBanco.toFixed(2).toLocaleString('en-US')
+  resumen_transitos_p.textContent = totalTransito.toFixed(2).toLocaleString('en-US')
+  resumen_entregados_p.textContent = totalEntregado.toFixed(2).toLocaleString('en-US')
+  resumen_retenidos_p.textContent = totalRetenido.toFixed(2).toLocaleString('en-US')
+  resumen_ajuste_nulo_p.textContent = totalNulo.toFixed(2).toLocaleString('en-US')
 
-  resumen_balance_libro_comprobacion_p.textContent = (totalBalanceBanco - totalTransito + totalNulo).toLocaleString('en-US')
+  resumen_balance_libro_comprobacion_p.textContent = (totalBalanceBanco - totalTransito + totalNulo).toFixed(2).toLocaleString('en-US')
 
-  resumen_comprobacion_p.textContent = ( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp) ).toLocaleString('en-US')
+  resumen_comprobacion_p.textContent = ( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp) ).toFixed(2).toLocaleString('en-US')
 
   
 }
