@@ -53,9 +53,13 @@ function afterDataTransacciones(data){
 
   if(!diaFiltro) return
 
+  fecha_input.value = diaFiltro
+
   const transacciones = conciliacion_global.dataEmpresas[empresa].filter(retiro => retiro.fecha == diaFiltro)
 
   setTableRetirosContent(transacciones)
+
+  updateResumen()
   
   empresa_input.disabled = false
   fecha_input.disabled = false
@@ -127,8 +131,14 @@ function setTableRetirosContent(transacciones){
       <td class="p-2 prop-beneficiario">${retiro['beneficiario']}</td>
       <td class="p-2 prop-concepto">${retiro['concepto']}</td>
       <td class="p-2 prop-monto">${Number(retiro['monto']).toLocaleString('en-US')}</td>
-      <td class="p-2 prop-estatus"><select class="form-select form-select-sm">${options_html}</select></td>
+      <td class="p-2 prop-impuesto">
+        <select class="form-select form-select-sm">
+          <option value="0.15%" selected>0.15%</option>
+          <option value="100">100</option>
+        </select>
+      </td>
       <td class="d-none prop-empresa">${retiro['empresa']}</td>
+      <td class="p-2 prop-estatus"><select class="form-select form-select-sm">${options_html}</select></td>
     </tr>
     `
     
@@ -148,7 +158,7 @@ function updateResumen(){
   const resumen_transitos_p = document.querySelector('#resumen_transitos_p')
   const resumen_entregados_p = document.querySelector('#resumen_entregados_p')
   const resumen_retenidos_p = document.querySelector('#resumen_retenidos_p')
-  const resumen_vencidos_p = document.querySelector('#resumen_vencidos_p')
+  // const resumen_vencidos_p = document.querySelector('#resumen_vencidos_p')
   const resumen_ajuste_nulo_p = document.querySelector('#resumen_ajuste_nulo_p')
   const resumen_balance_libro_comprobacion_p = document.querySelector('#resumen_balance_libro_comprobacion_p')
   const resumen_comprobacion_p = document.querySelector('#resumen_comprobacion_p')
@@ -164,7 +174,7 @@ function updateResumen(){
   resumen_transitos_p.textContent = '0.00'
   resumen_entregados_p.textContent = '0.00'
   resumen_retenidos_p.textContent = '0.00'
-  resumen_vencidos_p.textContent = '0.00'
+  // resumen_vencidos_p.textContent = '0.00'
   resumen_ajuste_nulo_p.textContent = '0.00'
   resumen_balance_libro_comprobacion_p.textContent = '0.00'
   resumen_comprobacion_p.textContent = '0.00'
@@ -192,65 +202,90 @@ function updateResumen(){
   totalNulo = 0
 
   const estatus_types = {
-    transito : ["Retenido","Entregado","Vencido"]
+    transito : ["Retenido","Entregado"]
   }
 
   conciliacion_global.dataEmpresas[empresa_input.value].forEach(retiro => {
+
     if(retiro.fecha == fechaActual){
-      totalPagosEmitidos += Number(retiro.monto)
+
+      if(retiro.impuesto == '0.15%'){
+        totalPagosEmitidos += 1.0015 * parseFloat(retiro.monto)
+      }else if(retiro.impuesto == '100'){
+        totalPagosEmitidos += parseFloat(retiro.monto) + 100
+      }
+
+      
+      
     }
 
     if(retiro.fecha == fechaAnterior){
-      totalPagosEmitidos_anterior += Number(retiro.monto)
+
+      if(retiro.impuesto == '0.15%'){
+        totalPagosEmitidos_anterior += 1.0015 * parseFloat(retiro.monto)
+      }else if(retiro.impuesto == '100'){
+        totalPagosEmitidos_anterior += parseFloat(retiro.monto) + 100
+      }
+
     }
 
     if(estatus_types.transito.includes(retiro.estatus)){
-      totalTransito += Number(retiro.monto)
+
+      if(retiro.impuesto == '0.15%'){
+        totalTransito += 1.0015 * parseFloat(retiro.monto)
+      }else if(retiro.impuesto == '100'){
+        totalTransito += parseFloat(retiro.monto) + 100
+      }
+
     }
 
     if(retiro.estatus == 'Retenido'){
-      totalRetenido += Number(retiro.monto)
-    }
 
-    if(retiro.estatus == 'Vencido'){
-      totalVencido += Number(retiro.monto)
+      if(retiro.impuesto == '0.15%'){
+        totalRetenido += 1.0015 * parseFloat(retiro.monto)
+      }else if(retiro.impuesto == '100'){
+        totalRetenido += parseFloat(retiro.monto) + 100
+      }
+
     }
 
     if(retiro.estatus == 'Entregado'){
-      totalEntregado += Number(retiro.monto)
-    }
 
-    if(retiro.estatus == 'Nulo'){
-      totalNulo += Number(retiro.monto)
+      if(retiro.impuesto == '0.15%'){
+        totalEntregado += 1.0015 * parseFloat(retiro.monto)
+      }else if(retiro.impuesto == '100'){
+        totalEntregado += parseFloat(retiro.monto) + 100
+      }
+
     }
     
   })
 
   conciliacion_global.depositos.forEach(deposito => {
     if(deposito.fecha == fechaActual){
-      totalDepositos += Number(deposito.monto)
+      totalDepositos += parseFloat(deposito.monto)
     }
 
     if(deposito.fecha == fechaAnterior){
-      totalDepositos_anterior += Number(deposito.monto)
+      totalDepositos_anterior += parseFloat(deposito.monto)
     }
     
   })
 
   conciliacion_global.ajustes_imp.forEach(ajuste => {
     if(ajuste.fecha == fechaActual){
-      totalAjusteImp += Number(ajuste.monto)
+      totalAjusteImp += parseFloat(ajuste.monto)
     }
     
     if(ajuste.fecha == fechaAnterior){
-      totalAjusteImp_anterior += Number(ajuste.monto)
+      totalAjusteImp_anterior += parseFloat(ajuste.monto)
     }
     
   })
 
   conciliacion_global.balances_bancos.forEach(balance => {
     if(balance.fecha == fechaActual){
-      totalBalanceBanco += Number(balance.balance)
+      totalBalanceBanco += parseFloat(balance.balance)
     }
     
   })
@@ -259,12 +294,12 @@ function updateResumen(){
   resumen_depositos_p.textContent = totalDepositos.toLocaleString('en-US')
   resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toLocaleString('en-US')
   resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toLocaleString('en-US')
-  resumen_balance_libro_p.textContent = ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos - totalAjusteImp).toLocaleString('en-US')
+  resumen_balance_libro_p.textContent = ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp).toLocaleString('en-US')
   resumen_balance_banco_p.value = totalBalanceBanco.toLocaleString('en-US')
   resumen_transitos_p.textContent = totalTransito.toLocaleString('en-US')
   resumen_entregados_p.textContent = totalEntregado.toLocaleString('en-US')
   resumen_retenidos_p.textContent = totalRetenido.toLocaleString('en-US')
-  resumen_vencidos_p.textContent = totalVencido.toLocaleString('en-US')
+  // resumen_vencidos_p.textContent = totalVencido.toLocaleString('en-US')
   resumen_ajuste_nulo_p.textContent = totalNulo.toLocaleString('en-US')
 
   resumen_balance_libro_comprobacion_p.textContent = (totalBalanceBanco - totalTransito + totalNulo).toLocaleString('en-US')

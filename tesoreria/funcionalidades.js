@@ -1,4 +1,4 @@
-export {guardarNuevosRegistros_cheques,guardarNuevoDeposito,guardarCuadre,actualizarEstatus}
+export {guardarNuevosRegistros_cheques,guardarNuevoDeposito,guardarCuadre,actualizarEstatus,actualizarImpuesto}
 
 import { modal } from "../scripts.js"
 import { conciliacion_global } from "./conciliacion/getData.js"
@@ -189,3 +189,40 @@ function actualizarEstatus(empresa,id,estatus){
   
 }
 
+function actualizarImpuesto(empresa,id,impuesto){
+  const url = 'https://script.google.com/macros/s/AKfycbzViU2XBYWhiy0ysNxkArI244q6yOftSFpubTgeGKUqMRMXzG0fW9e81hHHdJHn-7Xo/exec'
+
+  const jsonData = {
+    action : 'update impuesto',
+    token : sessionStorage.getItem('soles_webapp_session'),
+    id,
+    impuesto,
+    empresa
+  }
+  
+  const options = {
+    method: "POST",
+    Headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(jsonData)
+  }
+  
+  fetch(url,options)
+  .then(res => res.json())
+  .then(res => {
+    console.log(res)
+    if(!res.estatus){
+      document.querySelector('#modal_body_span').textContent = res.message
+      modal.show()
+      return
+    }
+
+    conciliacion_global.dataEmpresas[empresa].find(e => e.id == id).impuesto = impuesto
+
+    console.log('Actualizado')
+
+
+    
+    
+  })
+  
+}

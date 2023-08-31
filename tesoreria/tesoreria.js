@@ -2,7 +2,7 @@ export { showTesoreriaSection }
 
 import { getDataInicial,getDataTransacciones,getDepositos,conciliacion_global } from "./conciliacion/getData.js"
 import { update_tables,afterDataTransacciones,afterDepositos,setTableDepositosContent,setTableRetirosContent,updateResumen } from "./conciliacion/setData.js"
-import { guardarNuevosRegistros_cheques,guardarNuevoDeposito,guardarCuadre,actualizarEstatus } from "./funcionalidades.js"
+import { guardarNuevosRegistros_cheques,guardarNuevoDeposito,guardarCuadre,actualizarEstatus,actualizarImpuesto } from "./funcionalidades.js"
 
 
 function showTesoreriaSection(){
@@ -98,14 +98,6 @@ function showTesoreriaSection(){
                 </th>
                 <td>
                   <p class="m-0 fw-normal text-start" id="resumen_retenidos_p">0.00</p>
-                </td>
-              </tr>
-              <tr>
-                <th>
-                  <p class="m-0 fw-normal text-start ms-auto resumen_subp ps-3">Vencidos</p>
-                </th>
-                <td>
-                  <p class="m-0 fw-normal text-start" id="resumen_vencidos_p">0.00</p>
                 </td>
               </tr>
               <tr>
@@ -241,6 +233,7 @@ function showTesoreriaSection(){
                   <th class="py-1">Beneficiario</th>
                   <th class="py-1">Concepto</th>
                   <th class="py-1">Monto</th>
+                  <th class="py-1">Impuesto</th>
                   <th class="py-1">Estatus</th>
                 </tr>
               </thead>
@@ -253,14 +246,6 @@ function showTesoreriaSection(){
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
-                </tr>
-                <tr>
-                  <td class="d-none m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
-                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
-                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
-                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
-                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
-                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                 </tr>
                 <tr>
@@ -271,9 +256,21 @@ function showTesoreriaSection(){
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                 </tr>
                 <tr>
                   <td class="d-none m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                </tr>
+                <tr>
+                  <td class="d-none m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
+                  <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
                   <td class="m-0 p-0"><p class="m-0 p-0 placeholder-glow"><span class="placeholder col-12"></span></p></td>
@@ -365,6 +362,14 @@ function showTesoreriaSection(){
       const empresa = parentElement.querySelector('.prop-empresa').textContent
       const id = parentElement.querySelector('.prop-id').textContent
       actualizarEstatus(empresa,id,estatus)
+    }
+    
+    if(target.matches('#retiros_table tbody td.prop-impuesto select')){
+      const impuesto = target.value
+      const parentElement = target.parentElement.parentElement
+      const empresa = parentElement.querySelector('.prop-empresa').textContent
+      const id = parentElement.querySelector('.prop-id').textContent
+      actualizarImpuesto(empresa,id,impuesto)
     }
     
   })
