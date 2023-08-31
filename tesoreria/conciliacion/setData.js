@@ -288,20 +288,20 @@ function updateResumen(){
     
   })
   
-  balance_anterior_libro_p.textContent = (totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior).toFixed(2).toLocaleString('en-US')
-  resumen_depositos_p.textContent = totalDepositos.toFixed(2).toLocaleString('en-US')
-  resumen_pagos_emitidos_p.textContent = totalPagosEmitidos.toFixed(2).toLocaleString('en-US')
-  resumen_ajuste_imp_transferencia_p.value = totalAjusteImp.toFixed(2).toLocaleString('en-US')
-  resumen_balance_libro_p.textContent = ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp).toFixed(2).toLocaleString('en-US')
-  resumen_balance_banco_p.value = totalBalanceBanco.toFixed(2).toLocaleString('en-US')
-  resumen_transitos_p.textContent = totalTransito.toFixed(2).toLocaleString('en-US')
-  resumen_entregados_p.textContent = totalEntregado.toFixed(2).toLocaleString('en-US')
-  resumen_retenidos_p.textContent = totalRetenido.toFixed(2).toLocaleString('en-US')
-  resumen_ajuste_nulo_p.textContent = totalNulo.toFixed(2).toLocaleString('en-US')
+  balance_anterior_libro_p.textContent = parseFloat((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior)).toFixed(2).toLocaleString('en-US')
+  resumen_depositos_p.textContent = parseFloat(totalDepositos).toFixed(2).toLocaleString('en-US')
+  resumen_pagos_emitidos_p.textContent = parseFloat(totalPagosEmitidos).toFixed(2).toLocaleString('en-US')
+  resumen_ajuste_imp_transferencia_p.value = parseFloat(totalAjusteImp).toFixed(2).toLocaleString('en-US')
+  resumen_balance_libro_p.textContent = parseFloat(((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp)).toFixed(2).toLocaleString('en-US')
+  resumen_balance_banco_p.value = parseFloat(totalBalanceBanco).toFixed(2).toLocaleString('en-US')
+  resumen_transitos_p.textContent = parseFloat(totalTransito).toFixed(2).toLocaleString('en-US')
+  resumen_entregados_p.textContent = parseFloat(totalEntregado).toFixed(2).toLocaleString('en-US')
+  resumen_retenidos_p.textContent = parseFloat(totalRetenido).toFixed(2).toLocaleString('en-US')
+  resumen_ajuste_nulo_p.textContent = parseFloat(totalNulo).toFixed(2).toLocaleString('en-US')
 
-  resumen_balance_libro_comprobacion_p.textContent = (totalBalanceBanco - totalTransito + totalNulo).toFixed(2).toLocaleString('en-US')
+  resumen_balance_libro_comprobacion_p.textContent = parseFloat((totalBalanceBanco - totalTransito + totalNulo)).toFixed(2).toLocaleString('en-US')
 
-  resumen_comprobacion_p.textContent = ( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp) ).toFixed(2).toLocaleString('en-US')
+  resumen_comprobacion_p.textContent = parseFloat(( (totalBalanceBanco - totalTransito + totalNulo) - ((totalDepositos_anterior - totalPagosEmitidos_anterior - totalAjusteImp_anterior) + totalDepositos - totalPagosEmitidos + totalAjusteImp) )).toFixed(2).toLocaleString('en-US')
 
   
 }
