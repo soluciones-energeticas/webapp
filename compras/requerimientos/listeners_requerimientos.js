@@ -29,7 +29,7 @@ function setRequerimientosListeners(){
     if(id) registro = requerimientos_global.data_requerimientos.find(el => el.id == id)
     
     if(!fecha_input.value){
-      modal_body_span.textContent = 'El campo de fecha es obligatorio.'
+      document.getElementById('modal_alertas_message').textContent = 'El campo de fecha es obligatorio.'
       modal.show()
       if(registro) registro.editando = false
       return

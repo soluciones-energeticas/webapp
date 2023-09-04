@@ -8,7 +8,7 @@ function after_saving(res){
     const { estatus,data,message } = res
 
     if(!estatus){
-      modal_body_span.textContent = message
+      document.getElementById('modal_alertas_message').textContent = message
       modal.show()
       return
     }
@@ -140,7 +140,7 @@ function after_deleting(id,res){
     update_table()
     update_resumen()
   }else{
-    modal_body_span.textContent = message
+    document.getElementById('modal_alertas_message').textContent = message
     modal.show()
     return
   }

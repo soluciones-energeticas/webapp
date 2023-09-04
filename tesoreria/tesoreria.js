@@ -1,8 +1,8 @@
 export { showTesoreriaSection }  
 
-import { getDataInicial,getDataTransacciones,getDepositos,conciliacion_global } from "./conciliacion/getData.js"
-import { update_tables,afterDataTransacciones,afterDepositos,setTableDepositosContent,setTableRetirosContent,updateResumen } from "./conciliacion/setData.js"
-import { guardarNuevosRegistros_cheques,guardarNuevoDeposito,guardarCuadre,actualizarEstatus,actualizarImpuesto } from "./funcionalidades.js"
+import { conciliacion_global,getAll } from "./conciliacion/getData.js"
+import { updateAll,setTableDepositosContent,setTableRetirosContent } from "./conciliacion/setData.js"
+import { guardarNuevosRegistros_cheques,guardarNuevoDeposito,guardarCuadre,actualizarEstatus,actualizarImpuesto } from "./apiRequests.js"
 
 
 function showTesoreriaSection(){
@@ -209,13 +209,17 @@ function showTesoreriaSection(){
               <input id="buscar_retiros_input" type="text" class="form-control form-control-sm" placeholder="Buscar" aria-label="Input group example" aria-describedby="basic-addon1">
             </div>
           </div>
-          <div id="retiros_new_form" class="d-flex flex-wrap h-0 h-transition w-50 rounded-3">
+          <div id="retiros_new_form" class="d-flex flex-wrap h-0 h-transition w-100 rounded-3">
             <p class="fw-bold fs-5 w-100">Agregando nuevos registros</p>
             <p class="fw-bold w-100 text-danger d-none" id="retiros_alertas_new_form">Agregando nuevos registros</p>
-            <div class="p-1 w-100">
+            <div class="p-1 w-75">
               <label for="retiros_empresa_input" class="form-label">Empresa</label>
               <select id="retiros_empresa_input" class="form-select form-select-sm border-0 ps-1 w-100" aria-label="">
               </select>
+            </div>
+            <div class="p-1 w-25">
+              <label for="retiros_fecha_input" class="form-label">Empresa</label>
+              <input id="retiros_fecha_input" type="date" class="form-control form-control-sm" aria-label="Input group example" aria-describedby="basic-addon1">
             </div>
             <div class="p-1 w-100">
               <label for="retiros_fecha_input" class="form-label">Archivo</label>
@@ -305,16 +309,6 @@ function showTesoreriaSection(){
   const cuadre = document.querySelector('#resumen')
   const depositos_table = document.querySelector('#depositos_table')
   const depositos_header = document.querySelector('#depositos_header')
-
-  // cuadre_header.addEventListener('click', e => {
-  //   cuadre.classList.remove('d-none')
-  //   depositos_table.classList.add('d-none')
-  // })
-
-  // depositos_header.addEventListener('click', e => {
-  //   cuadre.classList.add('d-none')
-  //   depositos_table.classList.remove('d-none')
-  // })
   
   depositos_guardar_btn.addEventListener('click', e => {
     guardarNuevoDeposito()
@@ -375,11 +369,11 @@ function showTesoreriaSection(){
   })
 
   empresa_input.addEventListener('change',e => {
-    changeEvent_fecha_empresa()
+    updateAll()
   })
 
   fecha_input.addEventListener('change',e => {
-    changeEvent_fecha_empresa()
+    updateAll()
   })
 
 
@@ -397,11 +391,10 @@ function showTesoreriaSection(){
     }
 
     if(target.matches('#resumen_ajuste_imp_transferencia_p')){
-      const depositos = Number(resumen_depositos_p.textContent.replace(/,/g,""))
-      const pagosEmitidos = Number(resumen_pagos_emitidos_p.textContent.replace(/,/g,""))
       const ajusteImp = Number(resumen_ajuste_imp_transferencia_p.value.replace(/,/g,""))
+      const valorActual = Number(resumen_balance_libro_p.getAttribute('numericValue'))
 
-      resumen_balance_libro_p.textContent = (depositos - pagosEmitidos - ajusteImp).toLocaleString('en-US')
+      resumen_balance_libro_p.textContent = (valorActual + ajusteImp).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})
       
     }
     
@@ -410,7 +403,7 @@ function showTesoreriaSection(){
   day_before_btn.addEventListener('click', e => {
     const empresa = empresa_input.value
     let fechaActual = fecha_input.value
-    if(!fechaActual) fechaActual = conciliacion_global.dataEmpresas[empresa][0]?.fecha
+    if(!fechaActual) return
 
     const fecha_arr = fechaActual.split('-')
     const dia = Number(fecha_arr[2])
@@ -424,7 +417,7 @@ function showTesoreriaSection(){
   day_after_btn.addEventListener('click', e => {
     const empresa = empresa_input.value
     let fechaActual = fecha_input.value
-    if(!fechaActual) fechaActual = conciliacion_global.dataEmpresas[empresa][0]?.fecha
+    if(!fechaActual) return
 
     const fecha_arr = fechaActual.split('-')
     const dia = Number(fecha_arr[2])
@@ -435,11 +428,8 @@ function showTesoreriaSection(){
     fecha_input.dispatchEvent(new Event('change'))
   })
 
-  getDataInicial()
-  getDataTransacciones()
-  getDepositos()
+  getAll()
   
-
 }
 
 function createSearchTimer(timerProp,target){
@@ -448,10 +438,10 @@ function createSearchTimer(timerProp,target){
   if(!target.value){
     switch(timerProp){
       case 'depositos':
-        afterDepositos()
+        setTableDepositosContent([])
         break
       case 'retiros':
-        afterDataTransacciones()
+        setTableRetirosContent([])
         break
     }
 
@@ -511,10 +501,5 @@ function createSearchTimer(timerProp,target){
 
 }
 
-function changeEvent_fecha_empresa(){
-  document.querySelector('#buscar_depositos_input').value = ''
-  document.querySelector('#buscar_retiros_input').value = ''
-  update_tables()
-  updateResumen()
-}
+
 

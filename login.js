@@ -1,7 +1,6 @@
 
 import {showComprasSection} from './compras/compras.js'
 import { showTesoreriaSection } from './tesoreria/tesoreria.js'
-// import { modal } from './scripts.js'
 
 const body = document.querySelector('body .body')
 

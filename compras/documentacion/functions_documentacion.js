@@ -11,7 +11,7 @@ function after_saving_documentacion(obj){
 
   if(!estatus){
     modal.show()
-    modal.querySelector('.modal_body span').textContent = message
+    document.getElementById('modal_alertas_message').textContent = message
   }
 
   if(data.nuevo){
@@ -67,8 +67,8 @@ function after_save_clicking_documentacion(rows){
       if(!registro) return
 
       if(estatus_forzado_input.value != 'Anulado' && registro.estatus_forzado == 'Anulado'){
-        modal_body_span.textContent = 'Para remover el estatus anulado debes contactar con el administrador'
         modal.show()
+        document.getElementById('modal_alertas_message').textContent = 'Para remover el estatus anulado debes contactar con el administrador'
         registro.editando = false
         return
       }
@@ -80,10 +80,10 @@ function after_save_clicking_documentacion(rows){
       if(file_soporte) registro.file_soporte = file_soporte
 
       if(registro.estatus_forzado == 'Anulado' && !registro.soporte && !registro.file_soporte){
-        modal_body_span.textContent = 'Debes anexar un caso interno para poder anular una orden de compra.'
         registro.estatus_forzado = ''
         estatus_forzado_input.value = ''
         modal.show()
+        document.getElementById('modal_alertas_message').textContent = 'Debes anexar un caso interno para poder anular una orden de compra.'
         registro.editando = false
         return
       }
@@ -196,6 +196,6 @@ function after_deleting_documentacion(res){
     update_resumen_documentacion()
   }else{
     modal.show()
-    modal.querySelector('.modal_body span').textContent = message
+    document.getElementById('modal_alertas_message').textContent = message
   }
 }

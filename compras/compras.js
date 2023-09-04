@@ -251,7 +251,7 @@ function showComprasRequerimientosArticle(){
    .then(res => {
       if(!res.estatus){
         modal.show()
-        document.getElementById('modal_alertas').querySelector('.modal_body span').textContent = res.message
+        document.getElementById('modal_alertas_message').textContent = res.message
 
       }else{
         const article = document.querySelector('#compras_article')
@@ -442,7 +442,7 @@ function showComprasDocumentacionArticle(){
    .then(res => {
       if(!res.estatus){
         modal.show()
-        modal.querySelector('.modal_body span').textContent = res.message
+        document.getElementById('modal_alertas_message').textContent = res.message
 
       }else{
         const article = document.querySelector('#compras_article')
