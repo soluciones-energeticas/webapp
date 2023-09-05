@@ -5,7 +5,7 @@ import { update_table,update_resumen,hide_edition_form,show_edition_form } from 
 import { update_resumen_documentacion,update_table_documentacion,show_edition_form_documentacion,hide_edition_form_documentacion } from "./documentacion/renders_documentacion.js"
 import { setRequerimientosListeners } from "./requerimientos/listeners_requerimientos.js"
 import { setRequerimientosListeners_documentacion } from "./documentacion/listeners_documentacion.js"
-import { requerimientos } from "./requerimientos/html/requerimientos.js"
+import { requerimientos } from "./requerimientos/comp/requerimientos.js"
 
 window.soleswebapp.compras = { requerimientos : {},documentacion : {} }
 
