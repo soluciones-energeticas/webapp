@@ -1,8 +1,8 @@
-/* export { after_deleting,after_save_clicking,after_saving }
+export { after_deleting,after_save_clicking,after_saving }
 
-import { requerimientos_global } from "../compras.js"
-import { update_table,update_resumen } from "./renders_requerimientos.js"
-import { toast,modal } from "../../scripts.js"
+import { toast,modal } from "../../../scripts.js"
+import { requerimientos_global } from "../../compras.js"
+import { update_table,update_resumen } from "./renders.js"
 
 function after_saving(res){
     const { estatus,data,message } = res
@@ -122,4 +122,4 @@ function after_deleting(id,res){
     return
   }
 
-} */
+}

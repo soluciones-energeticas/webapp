@@ -1,4 +1,4 @@
-export { update_table,update_resumen,hide_edition_form,show_edition_form }
+/* export { update_table,update_resumen,hide_edition_form,show_edition_form }
 
 import { requerimientos_global } from "../compras.js"
 
@@ -73,4 +73,4 @@ function show_edition_form(){
   document.querySelector('.form_btn_section').classList.remove('d-none')
   document.querySelector('#resumen_section').classList.add('d-none')
   form_section.scroll(0,0)
-}
+} */

@@ -17,12 +17,10 @@
 
 .compras_main .table_section{
   width: 100%;
-  max-height: 500px;
-  overflow : scroll;
 }
 
 .compras_main table {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   font-size: 16px;
 }
 
@@ -67,7 +65,7 @@
   padding: 7px;
 }
 
-.compras_main tr :first-child{
+.compras_main tr > :first-child{
   display: none;
 }
 

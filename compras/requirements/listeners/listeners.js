@@ -1,9 +1,9 @@
-/* export {setRequerimientosListeners}
+export {setRequerimientosListeners}
 
-import { requerimientos_global } from "../compras.js"
-import { hide_edition_form,show_edition_form,update_table,update_resumen } from "./renders_requerimientos.js"
-import { modal } from "../../scripts.js"
-import { after_deleting, after_save_clicking } from "./functions_requerimientos.js"
+import { requerimientos_global } from "../../compras.js"
+import { modal } from "../../../scripts.js"
+import { after_save_clicking,after_deleting } from "../functions/afters.js"
+import { update_table,hide_edition_form,show_edition_form } from "../functions/renders.js"
 
 
 function setRequerimientosListeners(){
@@ -94,7 +94,20 @@ function setRequerimientosListeners(){
       const ticket = requerimientos_global.data_requerimientos.find(e => e.id == id_buscado)
 
       if(!ticket) return
-  
+
+      const inputs_calificacion = [
+        document.querySelector('#compras_requerimientos_article #calificacion_entrega_input'),
+        document.querySelector('#compras_requerimientos_article #calificacion_tiempo_entrega_input'),
+        document.querySelector('#compras_requerimientos_article #calificacion_calidad_input'),
+        document.querySelector('#compras_requerimientos_article #calificacion_precios_input'),
+      ]
+
+      inputs_calificacion.forEach(e => e.disabled = true)
+
+      inputs_calificacion.forEach(e => {
+        if(requerimientos_global.calificar_suplidores && ticket.estatus == 'Pendiente calificacion') e.disabled = false
+      })
+      
       requerimientos_global.ticket_seleccionado = ticket
       
       Object.keys(requerimientos_global.ticket_seleccionado).forEach(prop => {
@@ -225,4 +238,3 @@ function setRequerimientosListeners(){
   })
 }
 
- */

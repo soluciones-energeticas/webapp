@@ -3,7 +3,8 @@ export { setRequerimientosListeners_documentacion }
 import { documentacion_global } from "../compras.js"
 import { hide_edition_form_documentacion,show_edition_form_documentacion } from "./renders_documentacion.js"
 import { after_save_clicking_documentacion,after_deleting_documentacion } from "./functions_documentacion.js"
-import { update_resumen_documentacion,update_table_documentacion } from "./renders_documentacion.js"
+import { update_resumen_documentacion,update_table_documentacion,show_suplidores_form_documentacion,hide_suplidores_form_documentacion } from "./renders_documentacion.js"
+import { updateSuplidores } from "./suplidores.js"
 
 function setRequerimientosListeners_documentacion(){
   const nuevo_btn = document.getElementById('nuevo_btn')
@@ -13,6 +14,8 @@ function setRequerimientosListeners_documentacion(){
   const id_input = document.querySelector('#id_input')
   const form_section = document.querySelector('.form_section')
   const link_evidencia = document.querySelector('#link_evidencia')
+  const suplidores_form_section = document.querySelector('#suplidores_form_section')
+  const suplidores_aceptar_btn = document.querySelector('#suplidores_aceptar_btn')
 
   nuevo_btn.addEventListener('click', (e) => {
     document.querySelector('#form_edition_div').classList.add('d-none')
@@ -40,6 +43,11 @@ function setRequerimientosListeners_documentacion(){
       }
     },0)
   
+  })
+
+  suplidores_aceptar_btn.addEventListener('click', () => {
+    updateSuplidores()
+    
   })
   
   btn_borrar.addEventListener('click', e => {
@@ -118,6 +126,18 @@ function setRequerimientosListeners_documentacion(){
   
     if(target.matches('#to_pdf_btn')){
       printing_format()
+      
+    }
+  
+    if(target.matches('#suplidores_update_btn')){
+      hide_edition_form_documentacion()
+      show_suplidores_form_documentacion()
+      
+    }
+  
+    if(target.matches('#suplidores_cancelar_btn')){
+      hide_edition_form_documentacion()
+      hide_suplidores_form_documentacion()
       
     }
   
