@@ -9,9 +9,9 @@ function editionForm(){
   form.id = 'edition_form'
 
   form.append(comprasField())
-  form.append(calificacionField())
   form.append(contabilidadField())
   form.append(tesoreriaField())
+  form.append(calificacionField())
 
   section.append(form)
     
@@ -150,26 +150,39 @@ function calificacionField(){
   const fieldset = document.createElement('fieldset')
   fieldset.id = 'form_calificacion_fieldset'
   fieldset.className = 'd-flex flex-wrap p-2 border rounded-2 mt-2'
+  fieldset.disabled = true
 
   fieldset.innerHTML = `
-  <legend class="mb-4">Calificación de Suplidor</legend>
-  <div class="col-12 mb-3 px-1">
-    <label for="calificacion_entrega_input" class="form-label">Entrega o Recepción del producto o servicio</label>
-    <input name="calificacion_entrega_input" id="calificacion_entrega_input" disabled type="range" min="0" max="5" step="1" class="form-range" value="0">
-  </div>
-  <div class="col-12 mb-3 px-1">
-    <label for="calificacion_tiempo_entrega_input" class="form-label">Tiempo de Entrega o Recepción del producto o servicio</label>
-    <input name="calificacion_tiempo_entrega_input" id="calificacion_tiempo_entrega_input" disabled type="range" min="0" max="5" step="1" class="form-range" value="0">
-  </div>
-  <div class="col-12 mb-3 px-1">
-    <label for="calificacion_calidad_input" class="form-label">Calidad del producto o servicio recibido</label>
-    <input name="calificacion_calidad_input" id="calificacion_calidad_input" disabled type="range" min="0" max="5" step="1" class="form-range" value="0">
-  </div>
-  <div class="col-12 mb-3 px-1">
-    <label for="calificacion_precios_input" class="form-label">Precio del producto o servicio ofertado</label>
-    <input name="calificacion_precios_input" id="calificacion_precios_input" disabled type="range" min="0" max="5" step="1" class="form-range" value="0">
-  </div>
-  `
+  <legend class="mb-3">Calificación de Suplidor</legend>
+  ${inputRadio('calificacion_entrega','Entrega o Recepción del producto o servicio')}
+  ${inputRadio('calificacion_tiempo_entrega','Tiempo de Entrega o Recepción del producto o servicio')}
+  ${inputRadio('calificacion_calidad','Calidad del producto o servicio recibido')}
+  ${inputRadio('calificacion_precios','Precio del producto o servicio ofertado')}
+  ` 
 
   return fieldset
+}
+
+function inputRadio(id,label){
+  return `
+  <div class="d-flex flex-column mt-2">
+    <label class="mb-1 px-1">${label}:</label>
+    <div class="form-check ms-2">
+      <input class="form-check-input" type="radio" name="${id}" id="${id}1" value="Excelente">
+      <label class="form-check-label" for="${id}1">Excelente</label>
+    </div>
+    <div class="form-check ms-2">
+      <input class="form-check-input" type="radio" name="${id}" id="${id}2" value="Bueno">
+      <label class="form-check-label" for="${id}2">Bueno</label>
+    </div>
+    <div class="form-check ms-2">
+      <input class="form-check-input" type="radio" name="${id}" id="${id}3" value="Debe mejorar">
+      <label class="form-check-label" for="${id}3">Debe mejorar</label>
+    </div>
+    <div class="form-check ms-2">
+      <input class="form-check-input" type="radio" name="${id}" id="${id}4" value="Deficiente">
+      <label class="form-check-label" for="${id}4">Deficiente</label>
+    </div>
+  </div>
+  `
 }

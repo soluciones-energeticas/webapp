@@ -1,0 +1,77 @@
+#novedades_main_div{
+  width: 1200px;
+}
+
+#novedades_main_div #table_novedades_container{
+  max-height: 400px;
+}
+
+#novedades_main_div #table_novedades{
+  border-collapse: collapse;
+}
+
+#novedades_main_div #table_novedades thead tr{
+  position: sticky;
+  top: 0;
+}
+
+#novedades_main_div #table_novedades th span{
+  border-left: 2px solid white;
+}
+
+#novedades_main_div #table_novedades th:first-child span{
+  border-left: 0;
+}
+
+#novedades_main_div #table_novedades tbody tr:hover{
+  background-color: rgba(173, 216, 230, 0.192);
+  color: blue;
+  cursor: pointer;
+}  
+
+#novedades_modalDialog{
+  max-width: none;
+  width: 35%;
+}
+
+#novedades_main_div #tabla_detalles select{
+  background-color: transparent;
+  border: 1px solid lightblue;
+}
+
+#novedades_main_div #resumen_estatus_table_title{
+  border-left: 3px solid white;
+  border-right: 3px solid white;
+}
+
+#novedades_main_div #resumen_estatus_table{
+  border-collapse: collapse;
+}
+
+#novedades_main_div #resumen_estatus_table tbody tr:hover{
+  outline: 1px solid rgba(0, 0, 0, 0.349);
+}
+
+#novedades_main_div #resumen_estatus_table td,
+#novedades_main_div #resumen_estatus_table th{
+  border: 3px solid white;
+}
+
+#novedades_main_div .rowValue{
+  cursor: pointer;
+}
+
+#novedades_main_div .rowValue.divided{
+  border-right: 3px solid white;
+}
+
+#novedades_main_div #novedades_resumen_div{
+  max-height: 150px;
+  overflow: auto;
+}
+
+#novedades_main_div #detalles_close_btn{
+  cursor: pointer;
+}
+
+

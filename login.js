@@ -1,6 +1,7 @@
 
 import {showComprasSection} from './compras/compras.js'
 import { showTesoreriaSection } from './tesoreria/tesoreria.js'
+import { showNovedadesSection } from './novedades/novedades.js'
 
 const body = document.querySelector('body .body')
 
@@ -33,6 +34,7 @@ function showLogin(){
   const pass_input = document.querySelector('#pass_input')
   
   login_btn.addEventListener('click', e => {
+    login_btn.disabled = true
     
     const url = 'https://script.google.com/macros/s/AKfycbwNNT2Cfx9PHB6p9Awm_AdxvcPZwOFp7pAju01aQWAVWF03nKvXcU3ZCPCuB2vKDSCp/exec'
     const jsonData = {
@@ -50,12 +52,14 @@ function showLogin(){
     fetch(url,options)
     .then(res => res.json())
     .then(res => {
-       if(res.estatus){
+      
+      if(res.estatus){
         body.innerHTML = ''
         sessionStorage.setItem('soles_webapp_session',res.data.newToken)
         showAppAside(res.data)
         
       }else{
+        login_btn.disabled = false
         document.querySelector('#login_error').textContent = 'Usuario y/o contraseña inválidos'
       }
       
@@ -105,7 +109,7 @@ function validateAccess(){
 
 function showAppAside(data_res){
   body.innerHTML = `
-  <aside id="app_aside" class="d-flex flex-column text-white flex-shrink-0">
+  <aside id="app_aside" class="d-flex flex-column text-white flex-shrink-0 active">
     <div class="login_bg_div"></div>
     <div class="app_bg_div"></div>
     <img id="logo_img" class="mt-auto mx-auto mb-2 p-2" src="./assets/logo_soles.png" alt="">
@@ -114,10 +118,10 @@ function showAppAside(data_res){
         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
       </svg>
-      <span class="fs-3 ms-2">Usuario</span>
+      <span class="fs-3 ms-2">${data_res.username}</span>
     </div>
   </aside>
-  <main class="flex-grow-1 p-3 m-3 ms-0 rounded-3"></main>`
+  <main class="flex-grow-1 p-3 m-3 ms-0 rounded-3 overflow-hidden"></main>`
 
   if(data_res.secciones_permitidas.includes('compras_section')){
     const newElement = document.createElement('div')
@@ -154,6 +158,22 @@ function showAppAside(data_res){
     
   }
 
+  if(data_res.secciones_permitidas.includes('novedades_section')){
+    const newElement = document.createElement('div')
+    const container = body.querySelector('#app_aside')
+    const element = container.querySelector('#logo_img')
+    container.insertBefore(newElement,element)
+    
+    newElement.outerHTML = `
+    <div class="d-flex align-items-center justify-content-center w-100 menu_option mt-3">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brightness-alt-high" viewBox="0 0 16 16">
+      <path d="M8 3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 3zm8 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zm-13.5.5a.5.5 0 0 0 0-1h-2a.5.5 0 0 0 0 1h2zm11.157-6.157a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm-9.9 2.121a.5.5 0 0 0 .707-.707L3.05 5.343a.5.5 0 1 0-.707.707l1.414 1.414zM8 7a4 4 0 0 0-4 4 .5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5 4 4 0 0 0-4-4zm0 1a3 3 0 0 1 2.959 2.5H5.04A3 3 0 0 1 8 8z"/>
+    </svg>
+      <span class="flex-grow-1 ms-3">Novedades</span>
+    </div>`
+    
+  }
+
   document.querySelectorAll('.menu_option').forEach(option => {
     option.addEventListener('click', () => {
       const section = option.querySelector('span').textContent
@@ -167,6 +187,10 @@ function showAppAside(data_res){
           showTesoreriaSection()
           break
         
+        case 'Novedades':
+          showNovedadesSection()
+          break
+        
       }
       
     })
@@ -178,7 +202,7 @@ function showAppAside(data_res){
     const aside = document.querySelector('#app_aside')
   
     if(!aside.contains(target)){
-      aside.classList.remove('active')
+      // aside.classList.remove('active')
     }
     
   })

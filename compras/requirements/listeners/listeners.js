@@ -2,7 +2,7 @@ export {setRequerimientosListeners}
 
 import { requerimientos_global } from "../../compras.js"
 import { modal } from "../../../scripts.js"
-import { after_save_clicking,after_deleting } from "../functions/afters.js"
+import { after_save_clicking,after_deleting,after_refresh_clicking } from "../functions/afters.js"
 import { update_table,hide_edition_form,show_edition_form } from "../functions/renders.js"
 
 
@@ -12,9 +12,12 @@ function setRequerimientosListeners(){
   const btn_guardar = article.querySelector('#btn_guardar')
   const btn_borrar = article.querySelector('#btn_borrar')
   const btn_cancel = article.querySelector('#btn_cancel')
+  const btn_refresh = article.querySelector('#btnRefresh')
   const id_input = article.querySelector('#id_input')
   const form_section = article.querySelector('.form_section')
   const suplidores_update_btn = article.querySelector('#suplidores_update_btn')
+  const filtro_input = document.querySelector('#compras_requerimientos_article #filtro_input')
+  const search_input = document.querySelector('#compras_requerimientos_article #search_input')
 
   nuevo_btn.addEventListener('click', (e) => {
     hide_edition_form()
@@ -22,6 +25,11 @@ function setRequerimientosListeners(){
     form_contabilidad_fieldset.classList.add('d-none')
     form_tesoreria_fieldset.classList.add('d-none')
     document.querySelector('main').classList.add('creando_nuevo')
+  })
+
+  btn_refresh.addEventListener('click', () => {
+    btn_refresh.classList.add('updating')
+    after_refresh_clicking(btn_refresh)
   })
   
   btn_guardar.addEventListener('click', e => {
@@ -95,18 +103,11 @@ function setRequerimientosListeners(){
 
       if(!ticket) return
 
-      const inputs_calificacion = [
-        document.querySelector('#compras_requerimientos_article #calificacion_entrega_input'),
-        document.querySelector('#compras_requerimientos_article #calificacion_tiempo_entrega_input'),
-        document.querySelector('#compras_requerimientos_article #calificacion_calidad_input'),
-        document.querySelector('#compras_requerimientos_article #calificacion_precios_input'),
-      ]
+      const legendCalification = document.querySelector('#compras_requerimientos_article #form_calificacion_fieldset')
 
-      inputs_calificacion.forEach(e => e.disabled = true)
+      legendCalification.disabled = true
 
-      inputs_calificacion.forEach(e => {
-        if(requerimientos_global.calificar_suplidores && ticket.estatus == 'Pendiente calificacion') e.disabled = false
-      })
+      if(requerimientos_global.calificar_suplidores && ticket.estatus == 'Pendiente calificacion') legendCalification.disabled = false
       
       requerimientos_global.ticket_seleccionado = ticket
       
@@ -127,8 +128,6 @@ function setRequerimientosListeners(){
     
   })
   
-  
-  
   document.addEventListener('change', (e) => {
     const target = e.target
   
@@ -146,21 +145,56 @@ function setRequerimientosListeners(){
   
       
     }
-  
-    if(target.matches('#filtro_input')){
-      article.querySelectorAll('.table_section tbody tr').forEach(el => {
-        if(target.value != 'Selecciona un estatus'){
-          const estatus = el.querySelector('td[prop="estatus"]').textContent
-          if(estatus != target.value) el.classList.add('d-none')
-          else el.classList.remove('d-none')
-        }else{
-          el.classList.remove('d-none')
-        }
-        
-      })
+
+  })
+
+  filtro_input.addEventListener('change', (e) => {
+    const target = e.target
+
+    article.querySelectorAll('.table_section tbody tr').forEach(el => {
+      if(target.value != 'Selecciona un estatus'){
+        const estatus = el.querySelector('td[prop="estatus"]').textContent
+        if(estatus != target.value) el.classList.add('d-none')
+        else el.classList.remove('d-none')
+      }else{
+        el.classList.remove('d-none')
+      }
       
-    }
-    
+    })
+      
+  })
+
+  search_input.addEventListener('input', (e) => {
+    const target = e.target
+
+    hide_edition_form()
+    const search_array = target.value.split(';')
+
+    article.querySelectorAll('.table_section tbody tr').forEach(tr => {
+      const id = tr.querySelector('td[prop="id"]').textContent
+      const find = requerimientos_global.data_requerimientos.find(req => req.id == id)
+      let boolean = true
+
+      if(!find) return
+
+      const data = Object.entries(find).join("").toLowerCase()
+
+      for(let i = 0; i < search_array.length; i++){
+        const searchText = search_array[i].toLowerCase()
+        if(!data.includes(searchText)){
+          boolean = false
+          break
+        }
+      }
+
+      if(boolean){
+        tr.classList.remove('d-none')
+      }else{
+        tr.classList.add('d-none')
+      }
+
+
+    })
   })
   
   document.addEventListener('input', e => {
@@ -188,37 +222,6 @@ function setRequerimientosListeners(){
       
     }
   
-    if(target.matches('#search_input')){
-      hide_edition_form()
-      const search_array = target.value.split(';')
-  
-      article.querySelectorAll('.table_section tbody tr').forEach(tr => {
-        const id = tr.querySelector('td[prop="id"]').textContent
-        const find = requerimientos_global.data_requerimientos.find(req => req.id == id)
-        let boolean = true
-  
-        if(!find) return
-  
-        const data = Object.entries(find).join("").toLowerCase()
-  
-        for(let i = 0; i < search_array.length; i++){
-          const searchText = search_array[i].toLowerCase()
-          if(!data.includes(searchText)){
-            boolean = false
-            break
-          }
-        }
-  
-        if(boolean){
-          tr.classList.remove('d-none')
-        }else{
-          tr.classList.add('d-none')
-        }
-  
-  
-      })
-    }
-  
     if(target.matches('#chk_input')){
       tbk_input.value = ''
   
@@ -236,5 +239,12 @@ function setRequerimientosListeners(){
     }
     
   })
+
+  setInterval(() => {
+    btn_refresh.classList.add('updating')
+    after_refresh_clicking(btn_refresh)
+  }, 30000);
+
+  
 }
 

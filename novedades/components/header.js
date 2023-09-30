@@ -2,14 +2,12 @@ export {title,header}
 
 function title(){
   const div = document.createElement('div')
-  div.className = 'd-flex justify-content-between'
 
   const h2 = document.createElement('h2')
-  h2.textContent = 'Control y seguimiento de órdenes de compra'
-  h2.className = 'titulo fw-bold'
+  h2.textContent = 'Reporte de Novedades Diarias'
+  h2.className = 'titulo fw-bold fs-5 m-0 mb-4'
   
   div.append(h2)
-  div.append(btnRefresh())
 
   return div
 }
@@ -17,11 +15,12 @@ function title(){
 function header(){
   const section = document.createElement('section')
 
-  section.className = 'search_filter_section d-flex justify-content-between align-items-center my-2 w-75'
+  section.className = 'search_filter_section d-flex align-items-center mb-2'
+  section.id = 'header_section'
 
-  section.append(btnNuevo())
   section.append(searchInput())
-  section.append(estatusSelect())
+  section.append(btnNuevo())
+  section.append(btnExportar())
 
   return section
 }
@@ -45,9 +44,29 @@ function btnNuevo(){
   return btn
 }
 
+function btnExportar(){
+  const btn = document.createElement('button')
+
+  btn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+      <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+      <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+    </svg>
+    <span class="ms-2">Exportar</span>
+  `
+
+  btn.id = "exportar_btn"
+  btn.type = 'button'
+  btn.className = 'btn btn-sm btn-success text-light d-flex align-items-center ms-2'
+  btn.disabled = false
+
+  return btn
+}
+
 function searchInput(){
   const div = document.createElement('div')
-  div.className = 'input-group ms-3'
+  div.id = 'novedades_search_input'
+  div.className = 'input-group border-end pe-3 me-3'
 
   div.innerHTML = `
   <span class="input-group-text" id="basic-addon1">
@@ -61,31 +80,16 @@ function searchInput(){
   return div
 }
 
-function estatusSelect(){
-  const select = document.createElement('select')
-
-  select.innerHTML = `<option selected>Selecciona un estatus</option>`
-
-  select.id = 'filtro_input'
-  select.disabled = true
-  select.className = 'form-select form-select-sm w-auto ms-3'
-
-  return select
-}
-
-function btnRefresh(){
+function selectResponsable(){
   const div = document.createElement('div')
-
-  div.innerHTML = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-clockwise ms-3" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-  </svg>
+  div.className = 'ms-2'
+  div.innerHTML = 
+  `
+  <select id="novedades_responsables_select_input" class="form-select form-select-sm" aria-label="Default select example">
+    <option selected>Seleccione responsable</option>
+  </select>
   `
 
-  const btn = div.firstElementChild
-
-  btn.id = 'btnRefresh'
-
-  return btn
+  return div
+  
 }

@@ -132,4 +132,26 @@ main.creando_nuevo{
   padding: 0;
 }
 
+.w-0{
+  width: 0;
+}
 
+.w-70{
+  width: 70%;
+}
+
+.w-30{
+  width: 30%;
+}
+
+.bg_div_color{
+  background-color: rgba(0,0,0,0.6) !important;
+}
+
+.bg_lightgreen{
+  background-color: rgba(144, 238, 144, 0.658);
+}
+
+.fs-min{
+  font-size: 13px;
+}

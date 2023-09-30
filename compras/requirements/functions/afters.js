@@ -1,4 +1,4 @@
-export { after_deleting,after_save_clicking,after_saving }
+export { after_deleting,after_save_clicking,after_saving,after_refresh_clicking }
 
 import { toast,modal } from "../../../scripts.js"
 import { requerimientos_global } from "../../compras.js"
@@ -31,7 +31,7 @@ function after_saving(res){
 }
 
 function after_save_clicking(){
-  const id = document.querySelector('#id_input').value
+  const id = document.querySelector('#compras_requerimientos_article #form_compras_fieldset #id_input').value
   let registro
   
   if(id){
@@ -41,7 +41,21 @@ function after_save_clicking(){
 
     registro.editando = true
 
-    requerimientos_global.editable_props.forEach(prop => registro[prop] = document.querySelector(`#${prop}_input`).value)
+    requerimientos_global.editable_props.forEach(prop => {
+      const calificationInputs = [
+        'calificacion_entrega',
+        'calificacion_tiempo_entrega',
+        'calificacion_calidad',
+        'calificacion_precios'
+      ]
+      
+      if(calificationInputs.includes(prop)) return
+
+      registro[prop] = document.querySelector(`#${prop}_input`).value
+      
+    })
+
+    getCalificationValue(registro)
 
     const url = 'https://script.google.com/macros/s/AKfycbz3B6q-240Nc5p-8_Zd8BU2TpjHW69Tgu0BPvpYwrHHthDddQFCeL4lroQKw9n92v3T/exec'
 
@@ -106,6 +120,44 @@ function after_save_clicking(){
 
 }
 
+function after_refresh_clicking(btn_refresh){
+
+  const url = 'https://script.google.com/macros/s/AKfycbz3B6q-240Nc5p-8_Zd8BU2TpjHW69Tgu0BPvpYwrHHthDddQFCeL4lroQKw9n92v3T/exec'
+
+  const jsonData = {
+    action : 'REFRESH',
+    token : sessionStorage.getItem('soles_webapp_session')
+  }
+    
+  const options = {
+    method: "POST",
+    Headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(jsonData)
+  }
+
+  fetch(url,options)
+  .then(res => res.json())
+  .then(res => {
+    btn_refresh.classList.remove('updating')
+    requerimientos_global.data_requerimientos = res.data
+    update_table()
+    update_resumen()
+
+    const filtro_input = document.querySelector('#compras_requerimientos_article #filtro_input')
+    const search_input = document.querySelector('#compras_requerimientos_article #search_input')
+
+    if(filtro_input.value){
+      filtro_input.dispatchEvent(new Event('change'))
+    }else{
+      search_input.dispatchEvent(new Event('input'))
+    }
+    
+  })
+
+
+
+}
+
 function after_deleting(id,res){
   const estatus = res.estatus
   const message = res.message
@@ -122,4 +174,26 @@ function after_deleting(id,res){
     return
   }
 
+}
+
+function getCalificationValue(registro){
+  const id = document.querySelector('#compras_requerimientos_article #form_compras_fieldset #id_input')
+  const calificationInputs = [
+    'calificacion_entrega',
+    'calificacion_tiempo_entrega',
+    'calificacion_calidad',
+    'calificacion_precios'
+  ]
+
+  calificationInputs.forEach(inputName => {
+    const radios = document.querySelectorAll(`#compras_requerimientos_article #edition_form [name="${inputName}"]`)
+    for(let radio of radios){
+      if(radio.checked){
+        registro[inputName] = radio.value
+        break
+      }
+    }
+    
+  })
+  
 }
