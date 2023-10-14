@@ -14,7 +14,7 @@ function tableRowClick(main,tr){
     'id',
     'fecha_ingreso',
     'fecha_modificacion',
-    'usuario',
+    'acceso',
     'num_empleado',
     'nom_empleado',
     'novedad',

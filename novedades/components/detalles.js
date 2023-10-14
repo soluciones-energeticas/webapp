@@ -17,7 +17,7 @@ function detalles(){
     ['#','id'],
     ['Creación','fecha_ingreso'],
     ['Última modificación','fecha_modificacion'],
-    ['Usuario','usuario'],
+    ['Usuario','acceso'],
     ['Código de empleado','num_empleado'],
     ['Nombre de empleado','nom_empleado'],
     ['Novedad','novedad'],
