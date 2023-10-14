@@ -34,11 +34,6 @@
   width: 35%;
 }
 
-#novedades_main_div #tabla_detalles select{
-  background-color: transparent;
-  border: 1px solid lightblue;
-}
-
 #novedades_main_div #resumen_estatus_table_title{
   border-left: 3px solid white;
   border-right: 3px solid white;

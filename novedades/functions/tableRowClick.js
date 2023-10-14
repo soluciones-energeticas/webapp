@@ -31,10 +31,10 @@ function tableRowClick(main,tr){
   selectEstatus.value = novedad.estatus
   selectResponsable.value = novedad.responsable
 
-  if(globalNovedades.permisos.asignar_responsable) selectResponsable.disabled = false
+  if(globalNovedades.permisos.asignar_responsable && novedad.estatus != "Completado") selectResponsable.disabled = false
   else selectResponsable.disabled = true
 
-  if((globalNovedades.permisos.cambiar_estatus || novedad.responsable == globalNovedades.permisos.user) && novedad.responsable != 'Sin Responsable' && novedad.responsable){
+  if((globalNovedades.permisos.cambiar_estatus || novedad.responsable == globalNovedades.permisos.user) && novedad.responsable != 'Sin Responsable' && novedad.responsable && novedad.estatus != 'Completado'){
     selectEstatus.disabled = false
   }else{
     selectEstatus.disabled = true
@@ -75,5 +75,7 @@ function tableRowClick(main,tr){
     detalles_title.classList.remove('bg_lightgreen')
     detalles_title.querySelector('p').classList.remove('text-dark')
   }
+
+  document.querySelector('#novedades_detalles_soporte_cierre_input').value = novedad.soporte_cierre
   
 }

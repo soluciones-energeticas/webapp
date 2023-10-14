@@ -23,11 +23,11 @@ function responsables_side(novedades){
   const responsables = []
   
   novedades.forEach(novedad => {
-    let find = responsables.find(e => e.nombre == novedad.responsable)
+    let find = responsables.find(e => e.nombre == novedad.nombre_responsable)
 
     if(!find){
       responsables.push({
-        nombre: novedad.responsable,
+        nombre: novedad.nombre_responsable,
         cantidad: 1
       })
     }else{

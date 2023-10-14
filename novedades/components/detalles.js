@@ -31,6 +31,7 @@ function detalles(){
   div.append(selectAdjunto())
   div.append(selectEstatus())
   div.append(selectResponsable())
+  div.append(inputSoporteCierre())
   div.append(fragment)
 
   return div
@@ -73,7 +74,7 @@ function selectEstatus(){
   label.textContent = 'Estatus'
   
   const select = document.createElement('select')
-  select.className = 'form-select form-select-sm bg-white'
+  select.className = 'form-select form-select-sm'
   select.disabled = true
   select.id = 'novedades_detalles_estatus_select'
   
@@ -93,7 +94,7 @@ function selectResponsable(){
   label.textContent = 'Responsable'
   
   const select = document.createElement('select')
-  select.className = 'form-select form-select-sm bg-white'
+  select.className = 'form-select form-select-sm'
   select.disabled = true
   select.id = 'novedades_detalles_responsable_select'
   
@@ -101,4 +102,21 @@ function selectResponsable(){
   div.append(select)
 
   return div
+}
+
+function inputSoporteCierre(){
+  const div = document.createElement('div')
+  div.className = 'fs-6 fw-lighter p-2 ps-1 w-100 d-flex flex-wrap'
+
+  div.innerHTML = `
+    <label for="novedades_detalles_soporte_cierre_input" class="w-100 form-label">Soporte cierre</label>
+    <input name="soporte_cierre" type="text" class="form-control w-50 me-2 form-control-sm" id="novedades_detalles_soporte_cierre_input">
+    <button id="guardar_soporte_btn" type="button" class="btn btn-sm btn-primary">
+      <span class="spinner spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+      <span class="btnText">Guardar</span>
+    </button>
+  `
+  
+  return div
+  
 }

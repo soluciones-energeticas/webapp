@@ -2,6 +2,7 @@
 import {showComprasSection} from './compras/compras.js'
 import { showTesoreriaSection } from './tesoreria/tesoreria.js'
 import { showNovedadesSection } from './novedades/novedades.js'
+import { disabledBtn,activateBtn } from './scripts.js'
 
 const body = document.querySelector('body .body')
 
@@ -23,8 +24,8 @@ function showLogin(){
         <input type="password" class="form-control" id="pass_input">
       </div>
       <button id="login_btn" type="button" class="btn btn-primary mt-3">
-        <span id="login_btn_spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-        <span id="login_btn_text">Iniciar sesión</span>
+        <span id="login_btn_spinner" class="spinner spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+        <span id="login_btn_text" class="btnText">Iniciar sesión</span>
       </button>
     </form>
   </aside>
@@ -34,7 +35,7 @@ function showLogin(){
   const pass_input = document.querySelector('#pass_input')
   
   login_btn.addEventListener('click', e => {
-    login_btn.disabled = true
+    disabledBtn(login_btn,"Iniciando sesión")
     
     const url = 'https://script.google.com/macros/s/AKfycbwNNT2Cfx9PHB6p9Awm_AdxvcPZwOFp7pAju01aQWAVWF03nKvXcU3ZCPCuB2vKDSCp/exec'
     const jsonData = {
@@ -59,7 +60,7 @@ function showLogin(){
         showAppAside(res.data)
         
       }else{
-        login_btn.disabled = false
+        activateBtn(login_btn,"Iniciar sesión")
         document.querySelector('#login_error').textContent = 'Usuario y/o contraseña inválidos'
       }
       

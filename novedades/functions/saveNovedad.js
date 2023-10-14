@@ -1,9 +1,10 @@
 export { afterAcceptClick }
 
+import { activateBtn } from "../../scripts.js"
 import { globalNovedades, url } from "../novedades.js"
 import { setTableContent } from "../renders/tableRender.js"
 
-async function afterAcceptClick(form,btn,target,spinner){
+async function afterAcceptClick(form,btn){
   const formData = new FormData(form)
   const dataBody = {}
   
@@ -44,13 +45,10 @@ async function afterAcceptClick(form,btn,target,spinner){
     body: JSON.stringify(jsonData)
   }
 
-  btn.disabled = true
 
   fetch(url,options).then(res => res.json()).then(res => {
     console.log(res)
-    btn.disabled = false
-    target.textContent = 'Aceptar'
-    spinner.classList.add('visually-hidden')
+    activateBtn(btn,"Aceptar")
     document.querySelector('#novedades_new_form').reset()
     globalNovedades.novedades.splice(0,0,res.data)
     

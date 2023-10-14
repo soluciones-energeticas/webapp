@@ -13,6 +13,9 @@ function setTableContent(){
     const capitalizedName = name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     const tr = document.createElement('tr')
+
+    tr.setAttribute('id_novedad',e.id)
+    
     const marcadorCompletado = e.estatus == 'Completado' ? ' bg_lightgreen border-bottom border-2 border-white' : ''
     const arr = e.fecha_ingreso.split('T')[0].split('-')
     const fecha_ingreso = `${arr[2]}-${arr[1]}-${arr[0]}`

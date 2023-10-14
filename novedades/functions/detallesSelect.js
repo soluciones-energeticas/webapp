@@ -23,7 +23,7 @@ function setResponsablesHTML(){
   let html = '<option value="Sin Responsable">Sin Responsable</option>'
   
   globalNovedades.responsables.forEach(e => {
-    html += `<option value="${e.value}">${e.name}</option>`
+    html += `<option value="${e.value}" name="${e.name}">${e.name}</option>`
   })
 
   select.innerHTML = html

@@ -1,6 +1,8 @@
 export { modalNewNovedades }
 
 import { globalNovedades } from "../novedades.js"
+import { disabledBtn } from "../../scripts.js"
+import { afterAcceptClick } from "../functions/saveNovedad.js"
 
 function modalNewNovedades(){
   const div = document.createElement('div')
@@ -26,8 +28,8 @@ function modalNewNovedades(){
       </div>
       <div class="modal-footer">
         <button id="btnAceptar" type="button" class="btn btn-sm btn-info text-white bg-gradient">
-          <span class="visually-hidden spinner-border spinner-border-sm" aria-hidden="true"></span>
-          <span class="btn_text" role="status">Aceptar</span>
+          <span class="visually-hidden spinner spinner-border spinner-border-sm" aria-hidden="true"></span>
+          <span class="btnText" role="status">Aceptar</span>
         </button>
         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
       </div>
@@ -37,7 +39,21 @@ function modalNewNovedades(){
 
   div.querySelector('.modal-body').append(newNovedadForm())
 
-  document.querySelector('body').append(div)
+  document.querySelector('#novedades_main_div').append(div)
+
+  const btnAceptar = document.querySelector('#novedades_main_div #btnAceptar')
+
+  btnAceptar.addEventListener('click', e => {
+    const form = document.querySelector('#novedades_modalDialog form')
+    
+    if(!form.codigo.value || form.nombre.value == 'Empleado no encontrado' || !form.novedad.value){
+      alert('Los campos "Codigo","Nombre" y "Novedad" son obligatorios!')
+      return
+    }
+    
+    disabledBtn(btnAceptar,"Guardando")
+    afterAcceptClick(form,btnAceptar)
+  })
 
   const modalForm = new bootstrap.Modal(div)
 
